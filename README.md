@@ -6,4 +6,6 @@ Through a structured, hands-on approach, you will learn how to use GRASS GIS to 
 
 This tutorial emphasizes learning by doing, guiding you through the core functionality of GRASS GIS, including data import, preprocessing, and advanced spatial modeling. As an open-source platform, GRASS GIS provides a powerful and flexible environment for ecological analysis, making it an ideal tool for MCA. By the end of this tutorial, you will have a understanding of how to use GRASS GIS for MCA and the confidence to apply these techniques to your own projects.
 
-For the latest online version, go to [https://ecodiv.earth/TutorialsNotes/deerdensities/](https://ecodiv.earth/TutorialsNotes/deerdensities/).
+The repository contains the source material (Quarto book), but note that the Quarto extensions are not included. They need to be installed separately. 
+
+For the latest online HTML version, go to [https://ecodiv.earth/TutorialsNotes/deerdensities/](https://ecodiv.earth/TutorialsNotes/deerdensities/).

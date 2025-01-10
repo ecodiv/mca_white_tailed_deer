@@ -1,5 +1,7 @@
 _book
 _archive
+_extensions
+_book
 .Rproj.user
 .quarto
 .Rhistory
