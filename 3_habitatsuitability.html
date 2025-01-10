@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Paulo van Breugel">
+
+<title>Ecodiv.earth | From suitability to suitable regions – Mapping the distribution of the White-tailed deer in Minnesota</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./4_spatialdisaggregation.html" rel="next">
+<link href="./2_deerdensities.html" rel="prev">
+<link href="./images/favicon.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-d9d786a72be6d38a5dc5b0bef0536726.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-f754860cd4eddf66f326aca892a415da.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-contrib/nutshell-1.0.7/nutshell.js"></script>
+<script src="site_libs/quarto-contrib/nutshell-1.0.7/nutshell_options.js"></script>
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="site_libs/datatables-binding-0.31/datatables.js"></script>
+<script src="site_libs/jquery-3.6.1/jquery-3.6.1.min.js"></script>
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/dt-ext-buttons-1.13.6/css/buttons.dataTables.min.css" rel="stylesheet">
+<script src="site_libs/dt-ext-buttons-1.13.6/js/dataTables.buttons.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.html5.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.colVis.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.print.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+
+<meta property="og:title" content="Ecodiv.earth | From suitability to suitable regions">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://ecodiv.earth/images/habitatsuitabilityscheme.png">
+<meta property="og:site_name" content="Mapping the distribution of the White-tailed deer in Minnesota">
+<meta property="og:image:height" content="677">
+<meta property="og:image:width" content="1218">
+<meta name="twitter:title" content="Ecodiv.earth | From suitability to suitable regions">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://ecodiv.earth/images/habitatsuitabilityscheme.png">
+<meta name="twitter:site" content="@ecodiv">
+<meta name="twitter:image-height" content="677">
+<meta name="twitter:image-width" content="1218">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3_habitatsuitability.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Habitat suitability</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/whitetaileddeer7.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Mapping the distribution of the White-tailed deer in Minnesota</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <div class="dropdown">
+      <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Share"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+              <i class="bi bi-facebook pe-1"></i>
+            Facebook
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1_requirements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting started</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2_deerdensities.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Deer densities</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3_habitatsuitability.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Habitat suitability</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4_spatialdisaggregation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Spatial disaggregation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5_results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Results</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./all_code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">All code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Functions</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+<div class="quarto-sidebar-footer"><div class="sidebar-footer-item">
+<p style="color:lightgrey;">
+<i><a href="https://has.nl/en">HAS green academy</a><br> <a href="https://www.has.nl/onderzoek/lectoraten/lectoraat-innovatieve-biomonitoring/">Innovative Biomonitoring</a>
+</i></p><i>
+</i></div></div></nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">3.1</span> Introduction</a></li>
+  <li><a href="#sec-relassification" id="toc-sec-relassification" class="nav-link" data-scroll-target="#sec-relassification"><span class="header-section-number">3.2</span> Reclassification</a></li>
+  <li><a href="#sec-movingwindow" id="toc-sec-movingwindow" class="nav-link" data-scroll-target="#sec-movingwindow"><span class="header-section-number">3.3</span> Moving window average</a></li>
+  <li><a href="#habitat-suitability-index" id="toc-habitat-suitability-index" class="nav-link" data-scroll-target="#habitat-suitability-index"><span class="header-section-number">3.4</span> Habitat suitability index</a></li>
+  <li><a href="#infrastructure-water" id="toc-infrastructure-water" class="nav-link" data-scroll-target="#infrastructure-water"><span class="header-section-number">3.5</span> Infrastructure &amp; water</a></li>
+  <li><a href="#climate" id="toc-climate" class="nav-link" data-scroll-target="#climate"><span class="header-section-number">3.6</span> Climate</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-habitatsuitability" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Habitat suitability</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">3.1</span> Introduction</h2>
+<p>Quality deer habitats include a mixture of different habitats. Some are particularly important for food, while others are important for shelter. This tutorial follows the method by Fleming et al.<span class="citation" data-cites="fleming2004"><sup><a href="references.html#ref-fleming2004" role="doc-biblioref">1</a></sup></span> to compute the white-tailed deer habitat suitability index. This method assigns scores to the different land cover categories of the National Land Cover Dataset (NLCD)<span class="citation" data-cites="mrlc2016"><sup><a href="references.html#ref-mrlc2016" role="doc-biblioref">2</a></sup></span>, reflecting their quality in terms of food (QHF) and shelter (QHS) availability.</p>
+<div id="fig-deerdensities2" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-deerdensities2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/habitatsuitabilityscheme.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;3.1: From the land cover map to habitat suitability map in three steps: Reclassification of land cover types to suitability scores based on shelter and food availability, moving window inverse distance averaging of suitability scores, and the combination of the QHF and QHS maps based on the minimum score. If you are not familiar with moving window statistics (also called focal raster statistics), see this video tutorial."><img src="images/habitatsuitabilityscheme.png" class="img-fluid quarto-figure quarto-figure-left figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deerdensities2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: From the land cover map to habitat suitability map in three steps: Reclassification of land cover types to suitability scores based on shelter and food availability, moving window inverse distance averaging of suitability scores, and the combination of the QHF and QHS maps based on the minimum score. If you are not familiar with moving window statistics (also called focal raster statistics), see this <a href="https://www.coursera.org/lecture/gis-mapping-spatial-analysis-capstone/focal-raster-operators-InIzQ">video tutorial</a>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-relassification" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="sec-relassification"><span class="header-section-number">3.2</span> Reclassification</h2>
+<p>You’ll use the <a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.recode.attr.html">r.recode.attr</a> addon to reclassify the NLCD land cover data into two new raster layers; one reflecting the relative habitat suitability based on available food (QHF) and the other reflecting the relative habitat suitability based on available shelter (QHS). You can install the addon through the graphical user interface (<span class="style-menu">Menu → Settings → Addons Extension → Install</span>) or via the <a href="https://grass.osgeo.org/grass-stable/manuals/g.extension.html">g.extension</a> command.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page"><i class="fa-solid fa-terminal" aria-label="terminal"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false"><i class="fa-brands fa-python" aria-label="python"></i></a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">g.extension</span> extension=r.recode.attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>gs.run_command(<span class="st">"g.extension"</span>, extension<span class="op">=</span><span class="st">"r.recode.attr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>Besides the <span class="style-data">NLCD raster</span> layer, the <a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.recode.attr.html">r.recode.attr</a> function requires a conversion table with in the first column the ID’s of the land cover categories, and in the second and third columns the corresponding suitability scores based on food and shelter availability <a href="#tbl-conversiontable" class="quarto-xref">Table&nbsp;<span>3.1</span></a>. Note that the land cover category 11 (water) is not included in the conversion table. The corresponding cells in the output raster layers will have NODATA values. This is done because water should be ignored in the next step (paragraph <a href="#sec-movingwindow" class="quarto-xref"><span>3.3</span></a>).</p>
+<div class="cell">
+<div id="tbl-conversiontable" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-conversiontable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.1: Converion table with for each land cover category (LCID) the corresponding suitability scores based on the assumed relative food and shelter availability within those land cover categories. The values in the table are based on Fleming et al.<span class="citation" data-cites="fleming2004"><sup><a href="references.html#ref-fleming2004" role="doc-biblioref">1</a></sup></span>, with some modifications.
+</figcaption>
+<div aria-describedby="tbl-conversiontable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="htmlwidget-fc1d25cb8abd0cc43e69" style="width:100%;height:100%;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fc1d25cb8abd0cc43e69">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"editable":{"target":"cell","disable":{"columns":null},"numeric":[0,1,2],"date":[]},"data":[[21,22,23,24,31,41,42,43,52,71,81,82,90,95],[0.8,0.5,0,0,0,0.4,0.5,0.3,0.4,1,1,1,1,1],[0.5,0.5,0,0,0,1,1,1,1,0,0,0,0.75,0]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>LCID<\/th>\n      <th>food<\/th>\n      <th>shelter<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"ltrBp","pageLength":5,"buttons":[{"extend":"csv","filename":"deerSHI"}],"columnDefs":[{"className":"dt-center","targets":[0,1,2]},{"name":"LCID","targets":0},{"name":"food","targets":1},{"name":"shelter","targets":2}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100],"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'center','font-size':'0.9rem'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'center','font-size':'0.9rem'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'center','font-size':'0.9rem'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Download the CSV file <span class="style-data">deerSHI.csv</span> by pushing the CSV button above and copy the file to your working directory and run the code below. Note that if you want to use different conversion values, first change those values in <a href="#tbl-conversiontable" class="quarto-xref">Table&nbsp;<span>3.1</span></a> by double-clicking the cell you would like to edit.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true"><i class="fa-solid fa-terminal" aria-label="terminal"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false"><i class="fa-brands fa-python" aria-label="python"></i></a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">r.recode.attr</span> input=NLCD_2016 output=DHSI rules=deerSHI.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>gs.run_command(<span class="st">"r.recode.attr"</span>, <span class="bu">input</span><span class="op">=</span><span class="st">"NLCD_2016"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2"></a>               output<span class="op">=</span><span class="st">"DHSI"</span>, rules<span class="op">=</span><span class="st">"deerSHI.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>If you are not able or want to install the <span class="style-function">r.recode.attr</span> addon, you can also use the <a href="https://grass.osgeo.org/grass-stable/manuals/r.recode.html">r.recode</a> function. You’ll need the files containing the recode rules, <a href="materials/DHSI/DHSI_food.csv">DHSI_food.csv</a> and <a href="materials/DHSI/DHSI_shelter.csv">DHSI_shelter.csv</a>, as input. Running the code below will yield the same results as the code above.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true"><i class="fa-solid fa-terminal" aria-label="terminal"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false"><i class="fa-brands fa-python" aria-label="python"></i></a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">r.recode</span> <span class="at">-d</span> input=NLCD_2016 output=DHSI_food rules=DHSI_food.csv</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="ex">r.recode</span> <span class="at">-d</span> input=NLCD_2016 output=DHSI_shelter rules=DHSI_shelter.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>gs.run_command(</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="st">"r.recode"</span>, flags<span class="op">=</span><span class="st">"d"</span>, <span class="bu">input</span><span class="op">=</span><span class="st">"NLCD_2016"</span>, output<span class="op">=</span><span class="st">"DHSI_food"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    rules<span class="op">=</span><span class="st">"DHSI_food.csv"</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>gs.run_command(</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    <span class="st">"r.recode"</span>, <span class="bu">input</span><span class="op">=</span><span class="st">"NLCD_2016"</span>, output<span class="op">=</span><span class="st">"DHSI_shelter"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>    rules<span class="op">=</span><span class="st">"DHSI_shelter.csv"</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>)    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>The resulting layers are <span class="style-data">DHSI_shelter</span> and <span class="style-data">DHSI_food</span>. These will serve as input for the next step.</p>
+</section>
+<section id="sec-movingwindow" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sec-movingwindow"><span class="header-section-number">3.3</span> Moving window average</h2>
+<p>The next step is based on the assumption that the suitability of a site is not only determined by the food and shelter available at that site, but also by the availability of food and shelter in the immediate vicinity<span class="citation" data-cites="fleming2004"><sup><a href="references.html#ref-fleming2004" role="doc-biblioref">1</a></sup></span>. The exception is water; the presence of water is assumed to have no influence on the suitability of its surroundings, and vice versa.</p>
+<p>To account for the availability of food around a grid cell, you’ll calculate the inverse distance-weighted average QHF score of the cells within 450 meters of that cell. That is, for each cell, the average value of all cells within 450 meters is calculated, with cells further away contributing less to the average score than cells closer by. Similarly, to account for shelter availability in the surroundings, you’ll compute the inverse distance-weighted average QHS scores of the cells within 210-meter distance.</p>
+<p>To calculate an inverse distance weighted average (IDWA), you’ll use the <a href="https://grass.osgeo.org/grass79/manuals/r.mfilter.html">r.mfilter</a> function. As input, it uses a matrix weight filter file. Assuming the resolution you’re working with is 30 meters, you can use the matrix filter files <a href="share/QHFwaf.txt">QHFwaf_30m.txt</a> and <a href="share/QHSwaf.txt">QHSwaf_30m.txt</a> to calculate the IDWA of QHF and QHS respectively. Download these files into your working directory. <a href="#x-invisible1">:Click here to see what to do when working at a different resolution.</a></p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true"><i class="fa-solid fa-terminal" aria-label="terminal"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false"><i class="fa-brands fa-python" aria-label="python"></i></a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="sourceCode" id="annotated-cell-7"><pre class="sourceCode numberSource bash code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode bash"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1"></a><span class="co"># Remove the mask</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-2" class="code-annotation-target"><a href="#annotated-cell-7-2"></a><span class="ex">r.mask</span> <span class="at">-r</span></span>
+<span id="annotated-cell-7-3"><a href="#annotated-cell-7-3"></a></span>
+<span id="annotated-cell-7-4"><a href="#annotated-cell-7-4"></a><span class="co"># Compute the focal statistics</span></span>
+<span id="annotated-cell-7-5"><a href="#annotated-cell-7-5"></a><span class="ex">r.mfilter</span>  input=DHSItempS output=DHSI_shelterS, <span class="dt">\</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2">2</button><span id="annotated-cell-7-6" class="code-annotation-target"><a href="#annotated-cell-7-6"></a>filter=QHSwaf_30m.txt nprocs=4</span>
+<span id="annotated-cell-7-7"><a href="#annotated-cell-7-7"></a></span>
+<span id="annotated-cell-7-8"><a href="#annotated-cell-7-8"></a><span class="ex">r.mfilter</span> input=DHSItempF output=DHSI_foodS <span class="dt">\</span></span>
+<span id="annotated-cell-7-9"><a href="#annotated-cell-7-9"></a>filter=QHFwaf_30m.txt nprocs=4</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="2" data-code-annotation="1">Parallel processing can speed up the computation of <span class="style-function">r.mfilter</span> considerably. However, when a MASK is set, parallel processing is disabled. So, make sure to remove the MASK first.</span>
+</dd>
+<dt data-target-cell="annotated-cell-7" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="6" data-code-annotation="2">With <span class="style-parameter">nprocs</span> you set the number of threads for parallel computing. Change the number to fit your system.</span>
+</dd>
+</dl>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="sourceCode" id="annotated-cell-8"><pre class="sourceCode numberSource python code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1"></a><span class="co"># Remove the mask</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2"></a>gs.run_command(<span class="st">"r.mask"</span>, flags<span class="op">=</span><span class="st">"r"</span>)</span>
+<span id="annotated-cell-8-3"><a href="#annotated-cell-8-3"></a></span>
+<span id="annotated-cell-8-4"><a href="#annotated-cell-8-4"></a><span class="co"># Compute the focal statistics</span></span>
+<span id="annotated-cell-8-5"><a href="#annotated-cell-8-5"></a>gs.run_command(</span>
+<span id="annotated-cell-8-6"><a href="#annotated-cell-8-6"></a>    <span class="st">"r.mfilter"</span>,</span>
+<span id="annotated-cell-8-7"><a href="#annotated-cell-8-7"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"DHSI_shelter"</span>,</span>
+<span id="annotated-cell-8-8"><a href="#annotated-cell-8-8"></a>    output<span class="op">=</span><span class="st">"DHSI_shelterS"</span>,</span>
+<span id="annotated-cell-8-9"><a href="#annotated-cell-8-9"></a>    <span class="bu">filter</span><span class="op">=</span><span class="st">"QHSwaf_30m.txt"</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2">2</button><span id="annotated-cell-8-10" class="code-annotation-target"><a href="#annotated-cell-8-10"></a>    nprocs<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="annotated-cell-8-11"><a href="#annotated-cell-8-11"></a>)</span>
+<span id="annotated-cell-8-12"><a href="#annotated-cell-8-12"></a>gs.run_command(</span>
+<span id="annotated-cell-8-13"><a href="#annotated-cell-8-13"></a>    <span class="st">"r.mfilter"</span>,</span>
+<span id="annotated-cell-8-14"><a href="#annotated-cell-8-14"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"DHSI_food"</span>,</span>
+<span id="annotated-cell-8-15"><a href="#annotated-cell-8-15"></a>    output<span class="op">=</span><span class="st">"DHSI_foodS"</span>,</span>
+<span id="annotated-cell-8-16"><a href="#annotated-cell-8-16"></a>    <span class="bu">filter</span><span class="op">=</span><span class="st">"QHFwaf_30m.txt"</span>,</span>
+<span id="annotated-cell-8-17"><a href="#annotated-cell-8-17"></a>    nprocs<span class="op">=</span><span class="dv">4</span>, </span>
+<span id="annotated-cell-8-18"><a href="#annotated-cell-8-18"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="1">Parallel processing can speed up the computation of <span class="style-function">r.mfilter</span> considerably. However, when a MASK is set, parallel processing is disabled. So, make sure to remove the MASK first.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="10" data-code-annotation="2">With <span class="style-parameter">nprocs</span> you set the number of threads for parallel computing. Change the number to fit your system.</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<p>Remember that in paragraph <a href="#sec-relassification" class="quarto-xref"><span>3.2</span></a>, areas classified as <em>water</em> in the <span class="style-data">NLCD raster</span> layer were assigned a <em>null</em> value in the <span class="style-data">DHSI_shelter</span> and <span class="style-data">DHSI_food</span> raster layers. Because <em>null</em> cells are ignored by <span class="style-function">r.mfilter</span>, the presence of water has no influence on the suitability of its surroundings, and vice versa. This meets the second assumption mentioned at the beginning of this section.</p>
+</section>
+<section id="habitat-suitability-index" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="habitat-suitability-index"><span class="header-section-number">3.4</span> Habitat suitability index</h2>
+<p>To create the final deer habitat suitability index (DHSI), use the <a href="https://grass.osgeo.org/grass-stable/manuals/r.series.html">r.series</a> function to calculate the minimum of QHF and QHF scores applied to each pixel in the landscape.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true"><i class="fa-solid fa-terminal" aria-label="terminal"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false"><i class="fa-brands fa-python" aria-label="python"></i></a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="sourceCode" id="annotated-cell-9"><pre class="sourceCode numberSource bash code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode bash"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1"></a><span class="co"># Combine the layers</span></span>
+<span id="annotated-cell-9-2"><a href="#annotated-cell-9-2"></a><span class="ex">r.series</span> input=DHSI_shelterS,DHSI_foodS, <span class="dt">\</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1">1</button><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3"></a>output=HSI_tmp, method=minimum nprocs=4</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="3" data-code-annotation="1">With <span class="style-parameter">nprocs</span> you set the number of threads for parallel computing. Change the number to fit your system.</span>
+</dd>
+</dl>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="sourceCode" id="annotated-cell-10"><pre class="sourceCode numberSource python code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-10-1"><a href="#annotated-cell-10-1"></a><span class="co"># Combine the layers</span></span>
+<span id="annotated-cell-10-2"><a href="#annotated-cell-10-2"></a>gs.run_command(</span>
+<span id="annotated-cell-10-3"><a href="#annotated-cell-10-3"></a>    <span class="st">"r.series"</span>,</span>
+<span id="annotated-cell-10-4"><a href="#annotated-cell-10-4"></a>    <span class="bu">input</span><span class="op">=</span>[<span class="st">"DHSI_shelterS"</span>, <span class="st">"DHSI_foodS"</span>],</span>
+<span id="annotated-cell-10-5"><a href="#annotated-cell-10-5"></a>    output<span class="op">=</span><span class="st">"HSI_tmp"</span>,</span>
+<span id="annotated-cell-10-6"><a href="#annotated-cell-10-6"></a>    method<span class="op">=</span><span class="st">"minimum"</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-7" class="code-annotation-target"><a href="#annotated-cell-10-7"></a>    nprocs<span class="op">=</span><span class="dv">4</span></span>
+<span id="annotated-cell-10-8"><a href="#annotated-cell-10-8"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-10" data-code-lines="7" data-code-annotation="1">With <span class="style-parameter">nprocs</span> you set the number of threads for parallel computing. Change the number to fit your system.</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</section>
+<section id="infrastructure-water" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="infrastructure-water"><span class="header-section-number">3.5</span> Infrastructure &amp; water</h2>
+<p>In the raster layer created in the previous sections, roads, buildings, and other built-up areas may have gotten a score &gt; 0, depending on their surroundings. To ensure that all build-up areas have a suitability score of 0, convert the various infrastructure vector layers you imported earlier (<a href="1_requirements.html#sec-infrastructure" class="quarto-xref"><span>Section 1.4.3</span></a> or <a href="1_requirements.html#sec-infrastructure2" class="quarto-xref"><span>1.5.3</span></a>) to raster layers using the <a href="https://grass.osgeo.org/grass83/manuals/v.to.rast.html">v.to.rast</a> function. Use the <span class="style-parameter">use</span> and <span class="style-parameter">value</span> parameters to assign the value <em>0</em> to the various features in the resulting raster layers. The <span class="style-parameter">-d</span> flag is to densify line features (see the manual page for details).</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true"><i class="fa-solid fa-terminal" aria-label="terminal"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false"><i class="fa-brands fa-python" aria-label="python"></i></a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="sourceCode" id="annotated-cell-11"><pre class="sourceCode numberSource bash code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode bash"><span id="annotated-cell-11-1"><a href="#annotated-cell-11-1"></a><span class="ex">v.to.rast</span> input=buildings output=buildings <span class="dt">\</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="1">1</button><span id="annotated-cell-11-2" class="code-annotation-target"><a href="#annotated-cell-11-2"></a>use=val value=0 memory=1000</span>
+<span id="annotated-cell-11-3"><a href="#annotated-cell-11-3"></a></span>
+<span id="annotated-cell-11-4"><a href="#annotated-cell-11-4"></a><span class="ex">v.to.rast</span> input=railways output=railways <span class="dt">\</span></span>
+<span id="annotated-cell-11-5"><a href="#annotated-cell-11-5"></a>use=val value=0 memory=1000  </span>
+<span id="annotated-cell-11-6"><a href="#annotated-cell-11-6"></a></span>
+<span id="annotated-cell-11-7"><a href="#annotated-cell-11-7"></a><span class="ex">v.to.rast</span> input=roads output=roads <span class="dt">\</span></span>
+<span id="annotated-cell-11-8"><a href="#annotated-cell-11-8"></a>use=val value=0 memory=1000  </span>
+<span id="annotated-cell-11-9"><a href="#annotated-cell-11-9"></a></span>
+<span id="annotated-cell-11-10"><a href="#annotated-cell-11-10"></a><span class="ex">v.to.rast</span> input=traffic output=traffic <span class="dt">\</span></span>
+<span id="annotated-cell-11-11"><a href="#annotated-cell-11-11"></a>use=val value=0 memory=1000  </span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-11" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="2" data-code-annotation="1">Increasing the memory (in MB) to be used will speed up your calculations. Change this according to your system’s memory. If you don’t know, <a href="https://www.pcworld.com/article/395053/how-to-tell-what-kind-of-ram-you-have.html">see here</a> how to check your system’s memory.</span>
+</dd>
+</dl>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="sourceCode" id="annotated-cell-12"><pre class="sourceCode numberSource python code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-12-1"><a href="#annotated-cell-12-1"></a>gs.run_command(</span>
+<span id="annotated-cell-12-2"><a href="#annotated-cell-12-2"></a>    <span class="st">"v.to.rast"</span>,</span>
+<span id="annotated-cell-12-3"><a href="#annotated-cell-12-3"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"buildings"</span>,</span>
+<span id="annotated-cell-12-4"><a href="#annotated-cell-12-4"></a>    output<span class="op">=</span><span class="st">"buildings"</span>,</span>
+<span id="annotated-cell-12-5"><a href="#annotated-cell-12-5"></a>    use<span class="op">=</span><span class="st">"val"</span>,</span>
+<span id="annotated-cell-12-6"><a href="#annotated-cell-12-6"></a>    value<span class="op">=</span><span class="dv">0</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="1">1</button><span id="annotated-cell-12-7" class="code-annotation-target"><a href="#annotated-cell-12-7"></a>    memory<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="annotated-cell-12-8"><a href="#annotated-cell-12-8"></a>)</span>
+<span id="annotated-cell-12-9"><a href="#annotated-cell-12-9"></a>gs.run_command(</span>
+<span id="annotated-cell-12-10"><a href="#annotated-cell-12-10"></a>    <span class="st">"v.to.rast"</span>,</span>
+<span id="annotated-cell-12-11"><a href="#annotated-cell-12-11"></a>    flags<span class="op">=</span><span class="st">"d"</span>,</span>
+<span id="annotated-cell-12-12"><a href="#annotated-cell-12-12"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"railways"</span>,</span>
+<span id="annotated-cell-12-13"><a href="#annotated-cell-12-13"></a>    output<span class="op">=</span><span class="st">"railways"</span>,</span>
+<span id="annotated-cell-12-14"><a href="#annotated-cell-12-14"></a>    use<span class="op">=</span><span class="st">"val"</span>,</span>
+<span id="annotated-cell-12-15"><a href="#annotated-cell-12-15"></a>    value<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="annotated-cell-12-16"><a href="#annotated-cell-12-16"></a>    memory<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="annotated-cell-12-17"><a href="#annotated-cell-12-17"></a>)</span>
+<span id="annotated-cell-12-18"><a href="#annotated-cell-12-18"></a>gs.run_command(</span>
+<span id="annotated-cell-12-19"><a href="#annotated-cell-12-19"></a>    <span class="st">"v.to.rast"</span>,</span>
+<span id="annotated-cell-12-20"><a href="#annotated-cell-12-20"></a>    flags<span class="op">=</span><span class="st">"d"</span>,</span>
+<span id="annotated-cell-12-21"><a href="#annotated-cell-12-21"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"roads"</span>,</span>
+<span id="annotated-cell-12-22"><a href="#annotated-cell-12-22"></a>    output<span class="op">=</span><span class="st">"roads"</span>,</span>
+<span id="annotated-cell-12-23"><a href="#annotated-cell-12-23"></a>    use<span class="op">=</span><span class="st">"val"</span>,</span>
+<span id="annotated-cell-12-24"><a href="#annotated-cell-12-24"></a>    value<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="annotated-cell-12-25"><a href="#annotated-cell-12-25"></a>    memory<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="annotated-cell-12-26"><a href="#annotated-cell-12-26"></a>)</span>
+<span id="annotated-cell-12-27"><a href="#annotated-cell-12-27"></a>gs.run_command(</span>
+<span id="annotated-cell-12-28"><a href="#annotated-cell-12-28"></a>    <span class="st">"v.to.rast"</span>,</span>
+<span id="annotated-cell-12-29"><a href="#annotated-cell-12-29"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"traffic"</span>,</span>
+<span id="annotated-cell-12-30"><a href="#annotated-cell-12-30"></a>    output<span class="op">=</span><span class="st">"traffic"</span>,</span>
+<span id="annotated-cell-12-31"><a href="#annotated-cell-12-31"></a>    use<span class="op">=</span><span class="st">"val"</span>,</span>
+<span id="annotated-cell-12-32"><a href="#annotated-cell-12-32"></a>    value<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="annotated-cell-12-33"><a href="#annotated-cell-12-33"></a>    memory<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="annotated-cell-12-34"><a href="#annotated-cell-12-34"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-12" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-12" data-code-lines="7" data-code-annotation="1">Increasing the memory (in MB) to be used will speed up your calculations. Change this according to your system’s memory. If you don’t know, <a href="https://www.pcworld.com/article/395053/how-to-tell-what-kind-of-ram-you-have.html">see here</a> how to check your system’s memory.</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<p>The next step is to combine the various raster layers you created in the previous step with the <span class="style-data">HSI_tmp</span> using the <a href="https://grass.osgeo.org/grass-stable/manuals/r.patch.html">r.patch</a> function. This function will take the values of the first raster layer in the provided list (<span class="style-data">buildup</span>), and if that layer has “no data” cells, the values of the second raster layer (<span class="style-data">HSI_temp</span>) are used for these cells.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true"><i class="fa-solid fa-terminal" aria-label="terminal"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false"><i class="fa-brands fa-python" aria-label="python"></i></a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="sourceCode" id="annotated-cell-13"><pre class="sourceCode numberSource bash code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode bash"><span id="annotated-cell-13-1"><a href="#annotated-cell-13-1"></a><span class="ex">r.patch</span> input=buildings,railways,roads,traffic,HSI_tmp <span class="dt">\</span></span>
+<span id="annotated-cell-13-2"><a href="#annotated-cell-13-2"></a>output=HSI_tmp2 <span class="dt">\</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="1">1</button><span id="annotated-cell-13-3" class="code-annotation-target"><a href="#annotated-cell-13-3"></a>memory=1000 <span class="dt">\</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="2">2</button><span id="annotated-cell-13-4" class="code-annotation-target"><a href="#annotated-cell-13-4"></a>nprocs=4</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="3" data-code-annotation="1">Increasing the memory (in MB) to be used will speed up your calculations. Change this according to your system’s memory. If you don’t know, <a href="https://www.pcworld.com/article/395053/how-to-tell-what-kind-of-ram-you-have.html">see here</a> how to check your system’s memory.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="4" data-code-annotation="2">With <span class="style-parameter">nprocs</span> you set the number of threads for parallel computing. Change the number to fit your system.</span>
+</dd>
+</dl>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="sourceCode" id="annotated-cell-14"><pre class="sourceCode numberSource python code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-14-1"><a href="#annotated-cell-14-1"></a>gs.run_command(</span>
+<span id="annotated-cell-14-2"><a href="#annotated-cell-14-2"></a>    <span class="st">"r.patch"</span>,</span>
+<span id="annotated-cell-14-3"><a href="#annotated-cell-14-3"></a>    <span class="bu">input</span><span class="op">=</span>[</span>
+<span id="annotated-cell-14-4"><a href="#annotated-cell-14-4"></a>        <span class="st">"buildings"</span>,</span>
+<span id="annotated-cell-14-5"><a href="#annotated-cell-14-5"></a>        <span class="st">"railways"</span>,</span>
+<span id="annotated-cell-14-6"><a href="#annotated-cell-14-6"></a>        <span class="st">"roads"</span>,</span>
+<span id="annotated-cell-14-7"><a href="#annotated-cell-14-7"></a>        <span class="st">"traffic"</span>,</span>
+<span id="annotated-cell-14-8"><a href="#annotated-cell-14-8"></a>        <span class="st">"HSI_tmp"</span>,</span>
+<span id="annotated-cell-14-9"><a href="#annotated-cell-14-9"></a>    ],</span>
+<span id="annotated-cell-14-10"><a href="#annotated-cell-14-10"></a>    output<span class="op">=</span><span class="st">"HSI_tmp2"</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="1">1</button><span id="annotated-cell-14-11" class="code-annotation-target"><a href="#annotated-cell-14-11"></a>    memory<span class="op">=</span><span class="dv">1000</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="2">2</button><span id="annotated-cell-14-12" class="code-annotation-target"><a href="#annotated-cell-14-12"></a>    nprocs<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="annotated-cell-14-13"><a href="#annotated-cell-14-13"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-14" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="11" data-code-annotation="1">Increasing the memory (in MB) to be used will speed up your calculations. Change this according to your system’s memory. If you don’t know, <a href="https://www.pcworld.com/article/395053/how-to-tell-what-kind-of-ram-you-have.html">see here</a> how to check your system’s memory.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="12" data-code-annotation="2">With <span class="style-parameter">nprocs</span> you set the number of threads for parallel computing. Change the number to fit your system.<br>
+</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<p>And, to get the final habitat suitability layer for the White-tailed deer, assign the value 0 to all areas with water, and no data to all areas outside the boundaries of the state.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true"><i class="fa-solid fa-terminal" aria-label="terminal"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false"><i class="fa-brands fa-python" aria-label="python"></i></a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">r.mask</span> vector=Minnesota_bdry</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="ex">r.mapcalc</span> expression=<span class="st">"HSI_deer = if(NLCD_2016==11,0,HSI_tmp2)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>gs.run_command(<span class="st">"r.mask"</span>, vector<span class="op">=</span><span class="st">"Minnesota_bdry"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>gs.run_command(<span class="st">"r.mapcalc"</span>, expression<span class="op">=</span><span class="st">"HSI_deer = if(NLCD_2016==11,0,HSI_tmp2)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>As a final step, remove all intermediate layers.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true"><i class="fa-solid fa-terminal" aria-label="terminal"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false"><i class="fa-brands fa-python" aria-label="python"></i></a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="ex">g.remove</span> <span class="at">-f</span> type=vector,raster <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>name=buildings,railways,roads,traffic,HSI_tmp,HSI_tmp2, DHSI_shelter,DHSI_food,DHSI_foodS,DHSI_shelterS,deer_tmp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>gs.run_command(</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    <span class="st">"g.remove"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    flags<span class="op">=</span><span class="st">"f"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4"></a>    <span class="bu">type</span><span class="op">=</span><span class="st">"raster"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5"></a>    name<span class="op">=</span>[</span>
+<span id="cb10-6"><a href="#cb10-6"></a>        <span class="st">"buildings"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7"></a>        <span class="st">"railways"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8"></a>        <span class="st">"roads"</span>,</span>
+<span id="cb10-9"><a href="#cb10-9"></a>        <span class="st">"traffic"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10"></a>        <span class="st">"HSI_tmp"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11"></a>        <span class="st">"HSI_tmp2"</span>,</span>
+<span id="cb10-12"><a href="#cb10-12"></a>        <span class="st">"DHSI_shelter"</span>,</span>
+<span id="cb10-13"><a href="#cb10-13"></a>        <span class="st">"DHSI_food"</span>,</span>
+<span id="cb10-14"><a href="#cb10-14"></a>        <span class="st">"DHSI_foodS"</span>,</span>
+<span id="cb10-15"><a href="#cb10-15"></a>        <span class="st">"DHSI_shelterS"</span>,</span>
+<span id="cb10-16"><a href="#cb10-16"></a>        <span class="st">"deer_tmp"</span>,</span>
+<span id="cb10-17"><a href="#cb10-17"></a>    ],</span>
+<span id="cb10-18"><a href="#cb10-18"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="climate" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="climate"><span class="header-section-number">3.6</span> Climate</h2>
+<p>There are other factors that influence the suitability of an area for white-tailed deer. One of these is climate, and more specifically, the winter severity, which determines the northernmost limit of the species distribution<span class="citation" data-cites="kennedy-slaney2018"><sup><a href="references.html#ref-kennedy-slaney2018" role="doc-biblioref">3</a></sup></span>. In general, the species is well adapted to survive Minnesota’s cold, snowy winters. However, severe winters, which occur every so many years in the north of the state, can increase deer mortality, thus influencing population densities<span class="citation" data-cites="mndnr2021"><sup><a href="references.html#ref-mndnr2021" role="doc-biblioref">4</a></sup></span>.</p>
+<p>We did not take winter severity, nor other potentially important factors such as hunting, into account, as this can differ from year to year. In addition, these factors are already considered in the density estimates per deer permit area (DPA) dataset that we used to create the deer density distribution map (<a href="2_deerdensities.html" class="quarto-xref"><span>Chapter 2</span></a>).</p>
+<section id="x-invisible1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="x-invisible1">:x invisible1</h4>
+<p>If you run the analysis with a 60-meter resolution, use the matrix weight files <a href="share/QHFwaf_60m.txt">QHFwaf_60m.txt</a> and <a href="share/QHSwaf_60m.txt">QHSwaf_60m.txt</a> instead. For any other resolution, you need to create the appropriate matrix weight files yourself. You can do this using the Python script <a href="share/compute_rmfilter.py">compute rmfilter.py</a>.</p>
+</section>
+<section id="section-18" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="section-18"></h4>
+<!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
+<script src="https://formspree.io/js/formbutton-v1.min.js" defer=""></script>
+<script>
+  /* paste this line in verbatim */
+  window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
+  /* customize formbutton below*/     
+  formbutton("create", {
+    action: "https://formspree.io/f/xjvppyvg",
+    title: "Feedback", 
+    fields: [
+      { 
+        type: "email", 
+        label: "Email:", 
+        name: "email",
+        required: true,
+        placeholder: "your@email.com"
+      },
+      {
+        type: "hidden",
+        label: "",
+        value: "distribution white tailed deer - page 4",
+      },
+      {
+        type: "textarea",
+        label: "Message:",
+        name: "message",
+        placeholder: "Question or feedback? Let us know here.",
+      },
+      { type: "submit" }      
+    ],
+    styles: {
+      title: {
+        backgroundColor: "#57B444"
+      },
+      button: {
+        backgroundColor: "#57B444"
+      }
+    }
+  });
+</script>
+
+<i>
+
+<div id="refs" class="references csl-bib-body" role="list" style="display: none">
+<div id="ref-fleming2004" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Fleming KK, Didier KA, Miranda BR, Porter WF. Sensitivity of a white-tailed deer habitat-suitability index model to error in satellite land-cover data: Implications for wildlife habitat-suitability studies. <em>Wildlife Society Bulletin</em>. 2004;32(1):158-168. doi:<a href="https://doi.org/10.2193/0091-7648(2004)32[158:SOAWDH]2.0.CO;2">10.2193/0091-7648(2004)32[158:SOAWDH]2.0.CO;2</a></div>
+</div>
+<div id="ref-mrlc2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">MRLC. CONUS land cover, national land cover database (NLCD) 2016. Published online 2016. <a href="https://www.mrlc.gov/.">https://www.mrlc.gov/.</a></div>
+</div>
+<div id="ref-kennedy-slaney2018" class="csl-entry" role="listitem">
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Kennedy-Slaney L, Bowman J, Walpole AA, Pond BA. Northward bound: The distribution of white-tailed deer in ontario under a changing climate. <em>Wildlife Research</em>. 2018;45(3):220-228. doi:<a href="https://doi.org/10.1071/WR17106">10.1071/WR17106</a></div>
+</div>
+<div id="ref-mndnr2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">MNDNR. How winter impacts deer survival. Published online 2021. <a href="https://www.dnr.state.mn.us/mammals/deer/management/wsi.html">https://www.dnr.state.mn.us/mammals/deer/management/wsi.html</a></div>
+</div>
+<div id="ref-michiel2022" class="csl-entry" role="listitem">
+<div class="csl-left-margin">5. </div><div class="csl-right-inline">Michiel ES, Guidice JH. <em>Monitoring Population Trends of White-Tailed Deer in Minnesota - 2022</em>. Minnesota Department of Natural Resources; 2022:15. <a href="https://files.dnr.state.mn.us/wildlife/deer/reports/popmodel/popmodel_2022.pdf">https://files.dnr.state.mn.us/wildlife/deer/reports/popmodel/popmodel_2022.pdf</a></div>
+</div>
+</div>
+</i></section><i>
+</i></section><i>
+
+</i></main><i> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/ecodiv\.earth\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+      for (let i=0; i<annoteTargets.length; i++) {
+        const annoteTarget = annoteTargets[i];
+        const targetCell = annoteTarget.getAttribute("data-target-cell");
+        const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+        const contentFn = () => {
+          const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          if (content) {
+            const tipContent = content.cloneNode(true);
+            tipContent.classList.add("code-annotation-tip-content");
+            return tipContent.outerHTML;
+          }
+        }
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          onShow: (instance) => {
+            selectCodeLines(instance.reference);
+            instance.reference.classList.add('code-annotation-active');
+            window.tippy.hideAll();
+          },
+          onHide: (instance) => {
+            unselectCodeLines();
+            instance.reference.classList.remove('code-annotation-active');
+          },
+          maxWidth: 300,
+          delay: [50, 0],
+          duration: [200, 0],
+          offset: [5, 10],
+          arrow: true,
+          trigger: 'click',
+          appendTo: function(el) {
+            return el.parentElement.parentElement.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto',
+          placement: 'right',
+          positionFixed: true,
+          popperOptions: {
+            modifiers: [
+            {
+              name: 'flip',
+              options: {
+                flipVariations: false, // true by default
+                allowedAutoPlacements: ['right'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+              },
+            },
+            {
+              name: 'preventOverflow',
+              options: {
+                mainAxis: false,
+                altAxis: false
+              }
+            }
+            ]        
+          }      
+        };
+        window.tippy(annoteTarget, config); 
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./2_deerdensities.html" class="pagination-link" aria-label="Deer densities">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Deer densities</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./4_spatialdisaggregation.html" class="pagination-link" aria-label="Spatial disaggregation">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Spatial disaggregation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</i></div><i> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> by Paulo van Breugel, 2021 - 2025.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</i><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
