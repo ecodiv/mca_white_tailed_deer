@@ -1,0 +1,121 @@
+########################################################################
+# Suitability
+########################################################################
+
+# Import land use map and boundary maps
+r.in.gdal input=NLCD_2016_Land_Cover.tif output=NLCD_2016
+r.in.ogr input=bdry_counties_in_minnesota.gpkg layer=mn_county_boundaries output=Minnesota_counties
+
+# Set region
+g.region -a raster=NLCD_2016 vector=Minnesota_counties
+
+# Set mask and reclass layer
+r.mask -i raster=NLCD_2016 maskcats='11 23 24'
+r.recode.attr input=NLCD_2016 output=DHSI rules=deerSHI.csv
+r.mask -r
+
+# Create QHS, QHF and HSI_deer
+r.mfilter input=DHSI_shelter output=DHSI_shelterS filter=QHSwaf.txt nprocs=10
+r.mfilter input=DHSI_food output=DHSI_foodS filter=QHFwaf.txt nprocs=10
+r.series input=DHSI_shelterS,DHSI_foodS output=HSI_deer method=minimum nprocs=10 memory=40000
+r.null map=HSI_deer null=0 
+
+# Deer distribution
+v.in.ogr input=DPA_boundaries.gpkg output=deer_densities
+db.in.ogr input=DPA_deer_densities.csv output=deerdensities
+v.db.join map=deer_densities column=DPA other_table=deerdensities other_column=DPA subset_columns=density2017
+v.to.rast input=deer_densities use=attr attribute_column=density2017 output=deer_tmp where="density2017 != ''"
+r.mask vector=Minnesota_counties
+r.grow.distance input=deer_tmp value=deer_densities
+
+# Create base map with with DPA as zones
+v.to.rast input=deer_densities use=attr attribute_column=DPA output=dpa
+
+# Compute sum/average HSI score per DPA
+r.stats.zonal base=dpa cover=HSI_deer method=average output=HSI_average
+
+# Allocate deer densities
+r.mapcalc expression="DeerDensities2 = if(NLCD_2016==11 | NLCD_2016==23 | NLCD_2016==24, 0, (HSI_deer/HSI_average)*deer_densities)" memory=40000
+
+# Normalize / rescale
+r.univar map=DeerDensities
+echo "0.0:18.7:0.0:1.0" | r.recode -d --overwrite input=DeerDensities output=DeerDensities_suitability rules=-
+
+v.extract input=Minnesota_counties where="CTY_NAME = 'Otter Tail' OR CTY_NAME = 'Douglas' OR  CTY_NAME = 'Grant' OR CTY_NAME = 'Todd' OR  CTY_NAME = 'Wadena'" output=study_area
+g.region -a raster=NLCD_2016 vector=study_area
+
+g.region vector=study 
+r.univar map=DeerDensities2
+
+# Remove outliers - not required for study area
+r.quantile input=AA percentiles=99
+r.mapcalc expression="AAA = if(AA > 30, 30, AA)" --overwrite
+r.mapcalc "habitat_suitability = (AAA/30)" --overwrite
+
+########################################################################
+# Regions
+########################################################################
+
+# Set working directory
+cd /home/paulo/OneDrive/Projects/EcodivEarth/Tutorials/suitable_regions/images/
+
+# Print suitability map
+m.printws input=suitability_map.gxw dpi=100 output=suitability_map page=Flexi format=png region=studyarea --overwrite
+
+#r.suitability.regions input=habitat_suitability output=example01 suitability_threshold=0.8 minimum_size=500 --overwrite
+m.printws input=example01.gxw dpi=100 output=example01 page=Flexi format=png region=studyarea --overwrite
+
+#r.suitability.regions input=habitat_suitability output=example02 percentage=10 minimum_size=500 --overwrite
+m.printws input=example02.gxw dpi=100 output=example02 page=Flexi format=png region=studyarea --overwrite
+
+#r.suitability.regions -k input=habitat_suitability output=example03 suitability_threshold=0.8 minimum_size=500 --overwrite
+m.printws input=example03.gxw dpi=100 output=example03 page=Flexi format=png region=studyarea --overwrite
+
+#r.suitability.regions input=habitat_suitability output=example04 size=3 suitability_threshold=0.8 minimum_size=500 focal_statistic=median --overwrite
+m.printws input=example04.gxw dpi=100 output=example04 page=Flexi format=png region=studyarea --overwrite
+
+#r.suitability.regions input=habitat_suitability output=example05 size=3 suitability_threshold=0.8 minimum_size=500 focal_statistic=maximum --overwrite
+m.printws input=example05.gxw dpi=100 output=example05 page=Flexi format=png region=studyarea --overwrite
+
+#r.suitability.regions input=habitat_suitability output=example06 size=7 suitability_threshold=0.7 minimum_size=500 focal_statistic=maximum --overwrite
+m.printws input=example06.gxw dpi=100 output=example06 page=Flexi format=png region=studyarea --overwrite
+
+r.suitability.regions input=habitat_suitability output=example07 size=7 suitability_threshold=0.7 minimum_size=500 focal_statistic=maximum minimum_suitability=0 --overwrite
+m.printws input=example07.gxw dpi=100 output=example07 page=Flexi format=png region=studyarea --overwrite
+
+r.suitability.regions input=habitat_suitability output=example08 suitability_threshold=0.7 minimum_size=500 maximum_gap=150
+m.printws input=example08.gxw dpi=100 output=example08 page=Flexi format=png region=studyarea --overwrite
+m.printws input=example09.gxw dpi=100 output=example09 page=Flexi format=png region=studyarea --overwrite
+r.suitability.regions input=habitat_suitability output=example09 suitability_threshold=0.7 minimum_size=500
+m.printws input=example10.gxw dpi=100 output=example10 page=Flexi format=png region=inset --overwrite
+m.printws input=example11.gxw dpi=100 output=example11 page=Flexi format=png region=inset --overwrite
+
+r.suitability.regions -z input=habitat_suitability output=example10 suitability_threshold=0.7 minimum_size=500 
+m.printws input=example13.gxw dpi=100 output=example13 page=Flexi format=png --overwrite
+
+r.suitability.regions -a input=habitat_suitability output=example11 suitability_threshold=0.7 minimum_size=500 
+m.printws input=example14.gxw dpi=100 output=example14 page=Flexi format=png --overwrite
+
+r.suitability.regions -v -m input=habitat_suitability output=example12 suitability_threshold=0.7 minimum_size=500 
+m.printws input=example15.gxw dpi=100 output=example15 page=Flexi format=png --overwrite
+m.printws input=example16.gxw dpi=100 output=example16 page=Flexi format=png --overwrite
+m.printws input=example17.gxw dpi=100 output=example17 page=Flexi format=png --overwrite
+
+#r.suitability.regions input=habitat_suitability output=example13 suitability_threshold=0.7 minimum_size=500
+m.printws input=example18.gxw dpi=100 output=example18 page=Flexi format=png --overwrite
+#r.suitability.regions -d input=habitat_suitability output=example14 suitability_threshold=0.7 minimum_size=500
+m.printws input=example19.gxw dpi=100 output=example19 page=Flexi format=png --overwrite
+
+m.printws input=example20.gxw dpi=100 output=example20 page=Flexi format=png --overwrite
+m.printws input=example21.gxw dpi=100 output=example21 page=Flexi format=png --overwrite
+
+r.suitability.regions input=habitat_suitability output=example15 size=5 suitability_threshold=0.8 minimum_size=500 focal_statistic=maximum
+m.printws input=example22.gxw dpi=100 output=example22 page=Flexi format=png --overwrite
+
+r.suitability.regions -c input=habitat_suitability output=example16 size=5 suitability_threshold=0.8 minimum_size=500 focal_statistic=maximum
+m.printws input=example23.gxw dpi=100 output=example23 page=Flexi format=png --overwrite
+
+
+
+
+

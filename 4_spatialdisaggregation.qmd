@@ -1,0 +1,207 @@
+---
+date-modified: ""
+---
+
+# Spatial disaggregation {#sec-disaggregate}
+
+In @sec-dhc you created a map showing deer densities per deer permit area (DPA). However, deer densities will not be uniformly distributed across the DPA's. In general, one may expect deer densities to be higher in areas with more resources (food and shelter). To account for such differences in resource availability within the DPA’s, assume that deer densities are proportional to the suitability index score.
+
+![Spatial allocation of deer densities, proportionally to the HSI scores](images/spatial allocation.png){#fig-spatialdisagr fig-align="left" width="550px"}
+
+To accomplish this, you'll calculate for each of the 130 deer permit areas (DPA) the relative habitat suitability of each raster cell as the ratio between the HSI of that cell divided by the average HSI of the whole DPA. Next, you'll multiply this with the deer density of the DPA. 
+
+$DD_{i} = \frac{HSI_{i}}{\overline{HSI}_j} \times DD_{j}$
+
+With $DD_{i}$ as the deer density of cell _i_, $HSI_{i}$ the habitat suitability score in cell _i_, $\overline{HSI}_{j}$ the average habitat suitability scores in the DPA _j_, and $DD_{j}$ the deer density of DPA _j_.
+
+The first step is to create a raster layer of the DPA's. Remember that the vector layer [deer_densities]{.style-data} that you imported earlier is, in fact, a map of the DPA's, with per DPA the deer densities per DPA. So we can simply convert this vector layer to a raster layer again, but this time using the column *DPA* as the source for the raster value.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+v.to.rast input=deer_densities use=attr \
+attribute_column=DPA output=dpa
+```
+
+## {{< fa brands python >}}
+
+``` python
+# Create base map with with DPA as zones
+gs.run_command(
+    "v.to.rast",
+    input="deer_densities",
+    use="attr",
+    attribute_column="DPA",
+    output="dpa",
+)
+```
+:::
+
+Next, use [r.stats.zonal](https://grass.osgeo.org/grass-stable/manuals/r.stats.zonal.html) to calculate the average suitability scores per DPA.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+# Compute sum/average HSI score per DPA
+r.stats.zonal base=dpa cover=HSI_deer \
+method=average output=HSI_average
+```
+
+## {{< fa brands python >}}
+
+``` python
+# Compute sum/average HSI score per DPA
+gs.run_command(
+    "r.stats.zonal",
+    base="dpa",
+    cover="HSI_deer",
+    method="average",
+    output="HSI_average",
+)
+```
+:::
+
+And as a final step, use the versatile [r.mapcalc](https://grass.osgeo.org/grass-stable/manuals/r.mapcalc.html) to calculate the relative density.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+# Calculate the relative density
+r.mapcalc expression="DeerDensities = (HSI_deer/HSI_average)*deer_densities"
+```
+
+## {{< fa brands python >}}
+
+``` python
+# Calculate the relative density
+gs.run_command(
+    "r.mapcalc",
+    expression=("DeerDensities = (HSI_deer/HSI_average)*deer_densities"),
+)
+```
+:::
+
+If you plot the resulting map, you'll see that there are some small areas with very high density estimates, up to 96 deer/km$^2$. Apart from the question of how credible these numbers are, these outliers make it difficult to discern any clear pattern in deer densities in the rest of the state. We could use a logarithmic or histogram equalization scale for the color legend. However, that doesn't make it necessarily easier to interpret the resulting map. 
+
+As an alternative, we can remove the 2% highest values. We can do this by rescaling all values that are larger than the 98 percentile to be equal to the 98 percentile. First, find out the value of the 98<sup>st</sup> percentile. You can use the function [r.quantile](https://grass.osgeo.org/grass-stable/manuals/r.quantile.html) to do this.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+r.quantile input="DeerDensities percentiles=98
+```
+
+## {{< fa brands python >}}
+
+Note that you use the [gs.read_command]{.style-function} instead of the [gs.run_command]{.style-function} you used before. Read more about the differences between these functions  in the [GRASS Python scripting](https://grasswiki.osgeo.org/wiki/GRASS_Python_Scripting_Library) manual.
+
+``` python
+gs.read_command(
+    "r.quantile",
+    input="DeerDensities",
+    percentiles=98,
+)
+```
+:::
+
+You'll find that the outcome is 24.8. That means that you need to reclassify all raster cells with deer densities higher than 24.8 to 24.8. All other cells retain their original value. You can do this with [r.mapcalc](https://grass.osgeo.org/grass-stable/manuals/r.mapcalc.html). 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+r.mapcalc expression="Deer_Densities = if(DeerDensities > 24.8, 24.8, DeerDensities)" -overwrite
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "r.mapcalc",
+    expression="DeerDensities = if(DeerDensities > 24.8, 24.8, DeerDensities)",
+    overwrite=True,
+)
+```
+:::
+
+As a final step, remove all intermediate layers.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+g.remove -f type=raster,vector name=deer_densities,deer_tmp,dpa,HSI_average
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "g.remove",
+    flags="f",
+    type=["raster", "vector"],
+    name=[
+        "deer_densities",
+        "deer_tmp",
+        "dpa",
+        "HSI_average",
+    ],
+)
+```
+:::
+
+
+```{=html}
+<!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
+<script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
+<script>
+  /* paste this line in verbatim */
+  window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
+  /* customize formbutton below*/     
+  formbutton("create", {
+    action: "https://formspree.io/f/xjvppyvg",
+    title: "Feedback", 
+    fields: [
+      { 
+        type: "email", 
+        label: "Email:", 
+        name: "email",
+        required: true,
+        placeholder: "your@email.com"
+      },
+      {
+        type: "hidden",
+        label: "",
+        value: "distribution white tailed deer - page 5",
+      },
+      {
+        type: "textarea",
+        label: "Message:",
+        name: "message",
+        placeholder: "Question or feedback? Let us know here.",
+      },
+      { type: "submit" }      
+    ],
+    styles: {
+      title: {
+        backgroundColor: "#57B444"
+      },
+      button: {
+        backgroundColor: "#57B444"
+      }
+    }
+  });
+</script>
+
+```
+

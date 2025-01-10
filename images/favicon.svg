@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_1"
+   data-name="Layer 1"
+   viewBox="0 0 105.5 104.92"
+   version="1.1"
+   sodipodi:docname="internet-icon-original.svg"
+   inkscape:version="1.3 (1:1.3+202307231459+0e150ed6c4)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs16" />
+  <sodipodi:namedview
+     id="globe"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="7.6343882"
+     inkscape:cx="52.787465"
+     inkscape:cy="52.459999"
+     inkscape:window-width="1920"
+     inkscape:window-height="1043"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g16" />
+  <g
+     id="g16">
+    <path
+       d="M94,19.5A52.81,52.81,0,0,0,62.74.57,86.92,86.92,0,0,1,75.65,19.5Z"
+       fill="#6dcbf6"
+       id="path1" />
+    <path
+       d="M83.33,47.39c0,.86.06,1.71.08,2.57H105.5a52.43,52.43,0,0,0-8-25.55H77.9A71.18,71.18,0,0,1,83.33,47.39Z"
+       fill="#6dcbf6"
+       id="path2" />
+    <path
+       d="M77.18,80.26H97.6a52.53,52.53,0,0,0,7.9-25.39H83.36A72.23,72.23,0,0,1,77.18,80.26Z"
+       fill="#6dcbf6"
+       id="path3" />
+    <path
+       d="M62,104.41A52.78,52.78,0,0,0,94.13,85.17H74.84A107.17,107.17,0,0,1,62,104.41Z"
+       fill="#6dcbf6"
+       id="path4" />
+    <path
+       d="M57.07,85.17v17.46A107.14,107.14,0,0,0,69.28,85.17Z"
+       fill="#6dcbf6"
+       id="path5" />
+    <path
+       d="M78.44,54.87H57.07V80.26H71.79A68.21,68.21,0,0,0,78.44,54.87Z"
+       fill="#6dcbf6"
+       id="path6" />
+    <path
+       d="M57.07,1.72V19.5H70A84.63,84.63,0,0,0,57.07,1.72Z"
+       fill="#6dcbf6"
+       id="path7" />
+    <path
+       d="M78.43,47.74a66,66,0,0,0-6-23.33H57.07V50H78.5C78.48,49.22,78.47,48.48,78.43,47.74Z"
+       fill="#6dcbf6"
+       id="path8" />
+    <path
+       d="M11.37,85.17a52.75,52.75,0,0,0,35.72,19.75A107.91,107.91,0,0,1,33.8,85.17Z"
+       fill="#6dcbf6"
+       id="path9" />
+    <path
+       d="M36.85,80.26h15.3V54.87H30.2A68,68,0,0,0,36.85,80.26Z"
+       fill="#6dcbf6"
+       id="path10" />
+    <path
+       d="M30.21,47.74c-.05.74-.05,1.48-.07,2.22h22V24.41h-16A66,66,0,0,0,30.21,47.74Z"
+       fill="#6dcbf6"
+       id="path11" />
+    <path
+       d="M52.15,19.5V1.12A84.78,84.78,0,0,0,38.6,19.5Z"
+       fill="#6dcbf6"
+       id="path12" />
+    <path
+       d="M25.28,54.87H0A52.53,52.53,0,0,0,7.9,80.26H31.46A72.23,72.23,0,0,1,25.28,54.87Z"
+       fill="#6dcbf6"
+       id="path13" />
+    <path
+       d="M46.41,0A52.77,52.77,0,0,0,11.5,19.5H33A87,87,0,0,1,46.41,0Z"
+       fill="#6dcbf6"
+       id="path14" />
+    <path
+       d="M52.15,103.29V85.17H39.36A107.87,107.87,0,0,0,52.15,103.29Z"
+       fill="#6dcbf6"
+       id="path15" />
+    <path
+       d="M25.31,47.39a70.67,70.67,0,0,1,5.43-23H8A52.43,52.43,0,0,0,0,50H25.23C25.25,49.1,25.26,48.25,25.31,47.39Z"
+       fill="#6dcbf6"
+       id="path16" />
+  </g>
+</svg>

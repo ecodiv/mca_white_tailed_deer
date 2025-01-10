@@ -1,0 +1,612 @@
+/*-- scss:defaults --*/
+
+$theme: "ecodiv" !default;
+
+// ============= COLORS ========================================================
+
+// ------------- Generic color system ------------------------------------------
+
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #868e96 !default;
+$gray-700: #495057 !default;
+$gray-800: #373a3c !default;
+$gray-900: #212529 !default;
+$black:    #000 !default;
+
+$blue:    #2780e3 !default;
+$indigo:  #6610f2 !default;
+$purple:  #613d7c !default;
+$pink:    #e83e8c !default;
+$red:     #ff0039 !default;
+$orange:  #f0ad4e !default;
+$yellow:  #ff7518 !default;
+$green:   #3fb618 !default;
+$teal:    #20c997 !default;
+$cyan:    #9954bb !default;
+
+// ------------- Colors HAS green academy --------------------------------------
+
+$haslightgreen: #1CD354 !default;
+$hasdarkgreen:  #274232 !default;
+$haslightblue:  #008AFF !default;
+$hasdarkblue:   #163951 !default;
+$haslightpink:  #E324BA !default;
+$hasdarkpink:   #421B44 !default;
+$haslightred:   #ED2B00 !default;
+$hasdarkred:    #511A23 !default;
+
+// ------------- Colors Ecodiv -------------------------------------------------
+
+$ecodivblue: #246ABE !default;
+$ecodivblue-hover: #086D96 !default;
+$ecodivblue-background: #EEF4FA !default;
+$ecodivblue-borders: #D8E4F3 !default;
+$ecodivlightblue: #038FC9 !default;
+$ecodivlightblue-hover: #0773A0 !default;
+$ecodivgreen: #57B444 !default;
+$ecodivlightgreen: #57b44444 !default;
+$ecodivgreen-hover: #3F932E !default;
+
+// ------------- Colors GRASS GIS ---------------------------------------------
+
+$grass-color: #088B36 !default;
+$grass-color-alt: #9ED29C !default;
+$grass-color-light: #EFF4E8 !default;
+$grass-color-light-borders: #DBE2D2 !default;
+$grass-color-dark: #B8C6A5 !default;
+$grey-color-light: #CCCCCC !default;
+$grey-color-dark: #A0A0A0 !default;
+
+$min-contrast-ratio:   2.6 !default;
+
+// ------------- Default colors ------------------------------------------------
+
+$primary:       $gray-900 !default;
+$secondary:     $ecodivlightblue !default;
+$success:       $haslightgreen !default;
+$info:          $haslightpink !default;
+$warning:       $hasdarkpink !default;
+$danger:        $haslightred !default;
+$light:         $haslightblue !default;
+$dark:          $hasdarkblue !default;
+
+// ------------- FONT ----------------------------------------------------------
+
+$font-size-root: 16px;
+$h1-font-size: 1.6rem;
+$h2-font-size: 1.4rem;
+$h3-font-size: 1 rem;
+$h4-font-size: 1rem;
+$h5-font-size: 1rem;
+$toc-font-size: 1rem;
+
+$enable-rounded: false !default;
+
+// ------------- OBJECTS -------------------------------------------------------
+
+$space_text_object_top: 0.5rem;
+$space_text_object_bottom: 1.8rem;
+
+// ------------- Page ----------------------------------------------------------
+
+$body-color:    $gray-800 !default;
+$grid-body-width: 850px !default;
+$grid-margin-width: 300px !default;
+// $grid-sidebar-width: 250px !default;
+
+// ============= RULES =======================================================
+
+/*-- scss:rules --*/
+
+
+// ------------- Navbar -------------------------------------------------------
+
+.navbar {
+  color: $gray-600 !important;
+  background-color: $white;
+  --bs-navbar-padding-y: 0.0 rem !important;
+  --bs-navbar-brand-font-size: 2.375rem !important;
+}
+
+.navbar-logo {
+    max-height: 36px !important;
+    padding-right: 0.5rem !important;
+}
+
+.navbar-brand {
+  padding: 0rem 0.1rem 0rem 0.1rem !important;
+}
+
+.navbar-brand-logo {
+  margin-right: 0.1rem !important;
+}
+
+.navbar-title {
+  font-size: 1.4rem !important; 
+}
+
+// -------------  Sidebar ------------------------------------------------------
+
+/*
+#quarto-sidebar:before {
+    content: url(images/logo.png);
+    margin-bottom: 0rem;
+    margin-top: 1rem;
+}
+*/
+
+.quarto-cover-image {
+  max-width: 30%;
+  float: right;
+  margin-left: 35px;
+  margin-bottom: 6px;
+}
+
+.sidebar-item {
+  line-height: 1.2rem !important;
+  color: $gray-600;
+}
+
+.sidebar nav[role="doc-toc"] ul > li > a, .sidebar nav[role="doc-toc"] ul > li > ul > li > a  {
+  color: $gray-600 !important;
+}
+
+.sidebar nav[role="doc-toc"] ul > li > a.active, .sidebar nav[role="doc-toc"] ul > li > ul > li > a.active  {
+  border-left: 1px solid $gray-700;
+  color: $ecodivgreen !important;
+}
+.sidebar nav[role="doc-toc"] ul > li > a:hover, .sidebar nav[role="doc-toc"] ul > li > ul > li > a:hover {
+  color: $ecodivblue !important;
+}
+
+.sidebar-navigation .sidebar-item {
+    font-size: $toc-font-size;
+}
+
+
+
+
+// ------------- Fonts --------------------------------------------------------
+
+// stylelint-disable-next-line value-keyword-case 
+$font-family-sans-serif:    "Helvetica Neue", Arial, sans-serif, "Verdana", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$headings-font-weight:      400 !default;
+
+h1.title {
+font-size: 2.2rem !important;
+}
+
+h2 {
+  margin-top: 1.4rem !important;
+}
+
+h3 {
+  margin-top: 1.4rem !important;
+}
+
+
+a {
+  color: $ecodivlightblue-hover;
+  text-decoration-color: $ecodivlightblue-hover !important;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $ecodivgreen-hover !important;
+  text-decoration-color: $ecodivgreen-hover !important;
+}
+
+.figure-caption, .subfigure-caption, .table-caption, figcaption, caption {
+  font-size: .95rem;
+}
+
+figure.quarto-float-tbl figcaption.quarto-float-caption-top {
+  margin-top: .5rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.footnotes.footnotes-end-of-document {
+  color: $gray-500 !important;
+}
+
+// ------------- Special text (inline) -----------------------------------------
+
+.style-storage {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: $ecodivgreen-hover;
+}
+
+.style-data {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: $hasdarkred;
+}
+
+.style-path {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: $hasdarkpink;
+}
+
+.style-filename {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: $ecodivblue-hover;
+}
+
+.style-program {
+  font-style: italic;
+}
+
+.style-library {
+  font-style: italic;
+}
+.style-addon {
+  font-style: italic;
+}
+
+.style-function {
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.style-parameter {
+  font-family: monospace;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.style-examplecode {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: darkred;
+}
+
+.style-input {
+  font-family: monospace;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.style-menu {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: $hasdarkblue;
+  padding: 2px;
+  border-radius: 10%;
+}
+
+.style-downloadlink {
+  
+}
+
+// ------------- Alerts --------------------------------------------------------
+
+$alert-border-width:            0 !default;
+
+// ------------- Progress bars -------------------------------------------------
+
+$progress-height:               .5rem !default;
+
+
+// ------------- circled  numbers-----------------------------------------------
+
+.circlegreen {
+  border-radius: 50%;
+  padding: 1px 5px 1px 5px;
+  margin-bottom: 2px;
+  background: green;
+  border: 0px solid green;
+  color: $white;
+  font-family: Courier New;
+  font-size: 0.75em;
+}
+
+.circlehasgreen {
+  border-radius: 50%;
+  padding: 1px 5px 1px 5px;
+  margin-bottom: 2px;
+  background: $haslightgreen;
+  border: 0px solid $haslightgreen;
+  color: $white;
+  font-family: Courier New;
+}
+
+.circlered {
+  border-radius: 50%;
+  padding: 1px 5px 1px 5px;
+  margin-bottom: 2px;
+  background: $red;
+  border: 0px solid $red;
+  color: $white;
+  font-family: Courier New;
+}
+
+
+.circleblue {
+  border-radius: 50%;
+  padding: 1px 5px 1px 5px;
+  margin-bottom: 2px;
+  background: $ecodivblue;
+  border: 0px solid $ecodivblue;
+  color: $white;
+  font-family: Courier New;
+}
+
+
+.circleorange {
+  border-radius: 50%;
+  padding: 1px 5px 1px 5px;
+  margin-bottom: 2px;
+  background: $orange;
+  border: 0px solid $orange;
+  color: $white;
+  font-family: Courier New;
+}
+
+.circlepurple {
+  border-radius: 50%;
+  padding: 1px 5px 1px 5px;
+  margin-bottom: 2px;
+  background: $purple;
+  border: 0px solid $purple;
+  color: $white;
+  font-family: Courier New;
+}
+
+// ------------- Callouts ------------------------------------------------------
+
+.callout {
+  margin-top: 0.5rem !important;
+}
+
+div.callout-tip.callout {
+  border-left-color: $ecodivgreen !important;
+}
+
+div.callout-tip.callout-style-default > .callout-header {
+  background-color: $white !important;
+  background-color: white !important;
+}
+
+div.callout-tip.callout-style-default > .callout-header[aria-expanded="true"] {
+  background-color: $ecodivgreen !important;
+  color: $white;
+}
+
+// ------------- Panel tabset --------------------------------------------------
+
+.nav {
+  --bs-nav-link-padding-x: 0.8rem;
+  --bs-nav-link-padding-y: 0.4rem !important;
+  border-bottom: 1px solid $grass-color-light-borders !important;
+}
+
+.nav-tabs .nav-item .nav-link {
+  font-size: .9rem !important;
+  color: $grass-color !important;
+  line-height: 1px;
+  border: 0.5px solid $grass-color-light-borders !important;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.panel-tabset {
+   margin-top: $space_text_object_top;
+   margin-bottom: $space_text_object_bottom;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link.active {
+  color: $white;
+  background-color: $grass-color-light !important;
+  border-color:  $grass-color-light-borders !important;
+}
+
+.tab-content {
+  padding-top: 0.5em;
+  padding-right: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 0.5em;
+  margin-bottom: 0.1em;
+  border-left: 1px solid $grass-color-light-borders !important;
+  border-right: 1px solid $grass-color-light-borders !important;
+  border-bottom: 1px solid $grass-color-light-borders !important;
+  border-top: 0px solid $grass-color-light-borders !important;
+}
+
+.tab-pane > p {
+  padding-top: 0em;
+}
+
+.thisiscode p {
+  color: $gray-600 !important;
+  font-size: 0.97em;
+  padding-bottom: 0;
+  padding-left: 0.2em;
+  margin-bottom: 0;
+}
+
+div.sourceCode {
+  margin: 0.5em 0;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.tab-content .tab-pane > p {
+  margin-top: 1rem;
+}
+
+
+.circular--square { 
+  border-radius: 50%;
+}
+.circular--landscape { 
+  display: inline-block; 
+  position: relative; 
+  width: 200px; 
+  height: 200px; 
+  overflow: hidden; 
+  border-radius: 50%; }
+
+.circular--landscape img {
+  width: auto; 
+  height: 100%;
+  margin-left: -50px;
+}
+
+
+// ------------- Exercise tabset --------------------------------------------------
+
+.panel-tabset.exercise .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link.active {
+  color: $white;
+  background-color: $ecodivblue-background !important;
+  border-color:  $ecodivblue-borders !important;
+}
+
+.panel-tabset.exercise .nav-tabs .nav-item .nav-link {
+  font-size: .9rem !important;
+  color: $ecodivlightblue !important;
+  line-height: 1px;
+  border: 0.5px solid $ecodivblue-borders !important;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.panel-tabset.exercise .tab-content {
+  padding-top: 0.5em;
+  padding-right: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 0.5em;
+  margin-bottom: 0.1em;
+  border-left: 1px solid $ecodivblue-borders !important;
+  border-right: 1px solid $ecodivblue-borders !important;
+  border-bottom: 1px solid $ecodivblue-borders !important;
+  border-top: 0px solid $ecodivblue-borders !important;
+}
+
+
+// ------------- Variables -----------------------------------------------------
+
+$web-font-path: "https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap" !default;
+@if $web-font-path {
+  @import url($web-font-path);
+}
+
+// ------------- Typography ----------------------------------------------------
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+// ------------- Indicators ----------------------------------------------------
+
+.badge {
+  &.bg-light {
+    color: $dark;
+  }
+}
+
+// ------------- Progress bars -------------------------------------------------
+
+.progress {
+  @include box-shadow(none);
+
+  .progress-bar {
+    font-size: 8px;
+    line-height: 8px;
+  }
+}
+
+// ------------- Figures -------------------------------------------------------
+
+.quarto-layout-panel {
+  margin-top: $space_text_object_top;
+  margin-bottom: $space_text_object_bottom;
+}
+
+.quarto-layout-panel > figure > figcaption, .quarto-layout-panel > .panel-caption {
+  margin-top: 0px;
+}
+
+// ------------- Columns -------------------------------------------------------
+
+div.columns {
+  display: flex !important;
+  gap: min(4vw, 1.5em) !important;
+}
+
+// ------------- theorem -------------------------------------------------------
+
+.tab-content.exercise {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.theorem.exercise p {
+  margin-top: 0.3rem !important;
+}
+
+.theorem.exercise p:last-child {
+  margin-bottom: 0rem !important;
+}
+
+// ------------- nutshell ------------------------------------------------------
+
+
+.nutshell-bubble {
+  border-color: $grey-color-light !important;
+}
+.nutshell-bubble-arrow{
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-bottom: 20px solid $grey-color-light !important;
+        /*border-bottom: 20px solid #ddd;*/
+        position: absolute;
+        top: -20px;
+        pointer-events: none; /* don't block clicking */
+        --arrow-background: #fff; /* css var */
+    }
+
+
+// ------------- table ------------------------------------------------------
+
+div.dt-buttons > .dt-button, div.dt-buttons > div.dt-button-split .dt-button {
+  margin-top: 0.4rem !important;
+  padding: .5em 1em !important;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: .7em !important;
+  line-height: 0.8em !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: .5em 1em !important;
+  line-height: 0.8em !important;
+  font-size: .8em !important;
+}
+.dataTables_wrapper .dataTables_length {
+  font-size: .8em !important;
+}
+
+// ------------- Misc ------------------------------------------------------
+
+.functionlist ul {
+  margin-left: 0px;
+  padding-right: 4px;
+}
+
+
+.functionlist li {
+  margin-bottom: 12px;
+  margin-left: 2em;
+  padding-left: 1em;
+  margin-left: 0px;
+}

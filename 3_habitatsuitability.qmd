@@ -1,0 +1,398 @@
+---
+date-modified: ""
+---
+
+# Habitat suitability {#sec-habitatsuitability}
+
+## Introduction
+
+Quality deer habitats include a mixture of different habitats. Some are particularly important for food, while others are important for shelter. This tutorial follows the method by Fleming et al. [@fleming2004] to compute the white-tailed deer habitat suitability index. This method assigns scores to the different land cover categories of the National Land Cover Dataset (NLCD)[@mrlc2016], reflecting their quality in terms of food (QHF) and shelter (QHS) availability.
+
+![From the land cover map to habitat suitability map in three steps: Reclassification of land cover types to suitability scores based on shelter and food availability, moving window inverse distance averaging of suitability scores, and the combination of the QHF and QHS maps based on the minimum score. If you are not familiar with moving window statistics (also called focal raster statistics), see this [video tutorial](https://www.coursera.org/lecture/gis-mapping-spatial-analysis-capstone/focal-raster-operators-InIzQ).](images/habitatsuitabilityscheme.png){#fig-deerdensities2 fig-align="left"}
+
+## Reclassification {#sec-relassification}
+
+You'll use the [r.recode.attr](https://grass.osgeo.org/grass-stable/manuals/addons/r.recode.attr.html) addon to reclassify the NLCD land cover data into two new raster layers; one reflecting the relative habitat suitability based on available food (QHF) and the other reflecting the relative habitat suitability based on available shelter (QHS). You can install the addon through the graphical user interface ([Menu &rarr; Settings &rarr; Addons Extension &rarr; Install]{.style-menu}) or via the [g.extension](https://grass.osgeo.org/grass-stable/manuals/g.extension.html) command. 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+g.extension extension=r.recode.attr
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command("g.extension", extension="r.recode.attr")
+```
+:::
+
+Besides the [NLCD raster]{.style-data} layer, the [r.recode.attr](https://grass.osgeo.org/grass-stable/manuals/addons/r.recode.attr.html) function requires a conversion table with in the first column the ID's of the land cover categories, and in the second and third columns the corresponding suitability scores based on food and shelter availability @tbl-conversiontable. Note that the land cover category 11 (water) is not included in the conversion table. The corresponding cells in the output raster layers will have NODATA values. This is done because water should be ignored in the next step (paragraph [-@sec-movingwindow]). 
+
+```{r}
+#| echo: false
+#| include: false
+
+df <- read.csv("share/deerSHI.csv") |>
+dplyr::mutate(food = as.numeric(food), shelter=as.numeric(shelter))
+```
+
+```{r}
+#| echo: false
+#| label: tbl-conversiontable
+#| tbl-cap: Converion table with for each land cover category (LCID) the corresponding suitability scores based on the assumed relative food and shelter availability within those land cover categories. The values in the table are based on Fleming et al.[@fleming2004], with some modifications. 
+DT::datatable(data = df, selection="none", editable=TRUE,
+              height='100%', width='100%', 
+              rownames = FALSE, 
+              style="default", class="display", escape = FALSE,
+              extensions = c('Buttons'),
+              options = list(dom = 'ltrBp', pageLength = 5, 
+                             buttons = list(
+                                 list(extend='csv', filename='deerSHI')),
+                             columnDefs=list(list(className='dt-center', targets=c(0,1,2))))) |>
+                DT::formatStyle(c(1:3), `text-align` = 'center', `font-size` = '0.9rem')
+```
+
+Download the CSV file [deerSHI.csv]{.style-data} by pushing the CSV button above and copy the file to your working directory and run the code below. Note that if you want to use different conversion values, first change those values in @tbl-conversiontable by double-clicking the cell you would like to edit. 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+r.recode.attr input=NLCD_2016 output=DHSI rules=deerSHI.csv
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command("r.recode.attr", input="NLCD_2016",
+               output="DHSI", rules="deerSHI.csv")
+```
+:::
+
+If you are not able or want to install the [r.recode.attr]{.style-function} addon, you can also use the [r.recode](https://grass.osgeo.org/grass-stable/manuals/r.recode.html) function. You'll need the files containing the recode rules, [DHSI_food.csv](materials/DHSI/DHSI_food.csv) and [DHSI_shelter.csv](materials/DHSI/DHSI_shelter.csv), as input. Running the code below will yield the same results as the code above.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+r.recode -d input=NLCD_2016 output=DHSI_food rules=DHSI_food.csv
+r.recode -d input=NLCD_2016 output=DHSI_shelter rules=DHSI_shelter.csv
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "r.recode", flags="d", input="NLCD_2016", output="DHSI_food",
+    rules="DHSI_food.csv"
+)
+gs.run_command(
+    "r.recode", input="NLCD_2016", output="DHSI_shelter",
+    rules="DHSI_shelter.csv"
+)    
+```
+:::
+
+The resulting layers are [DHSI_shelter]{.style-data} and [DHSI_food]{.style-data}. These will serve as input for the next step.
+
+## Moving window average {#sec-movingwindow}
+
+The next step is based on the assumption that the suitability of a site is not only determined by the food and shelter available at that site, but also by the availability of food and shelter in the immediate vicinity[@fleming2004]. The exception is water; the presence of water is assumed to have no influence on the suitability of its surroundings, and vice versa.
+
+To account for the availability of food around a grid cell, you'll calculate the inverse distance-weighted average QHF score of the cells within 450 meters of that cell. That is, for each cell, the average value of all cells within 450 meters is calculated, with cells further away contributing less to the average score than cells closer by. Similarly, to account for shelter availability in the surroundings, you'll compute the inverse distance-weighted average QHS scores of the cells within 210-meter distance. 
+
+To calculate an inverse distance weighted average (IDWA), you'll use the [r.mfilter](https://grass.osgeo.org/grass79/manuals/r.mfilter.html) function. As input, it uses a matrix weight filter file. Assuming the resolution you're working with is 30 meters, you can use the matrix filter files [QHFwaf_30m.txt](share/QHFwaf.txt) and [QHSwaf_30m.txt](share/QHSwaf.txt) to calculate the IDWA of QHF and QHS respectively. Download these files into your working directory. [:Click here to see what to do when working at a different resolution.](#x-invisible1)
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+# Remove the mask
+r.mask -r                                                       # <1>
+
+# Compute the focal statistics
+r.mfilter  input=DHSItempS output=DHSI_shelterS, \
+filter=QHSwaf_30m.txt nprocs=4                                 # <2>
+
+r.mfilter input=DHSItempF output=DHSI_foodS \
+filter=QHFwaf_30m.txt nprocs=4
+```
+1. Parallel processing can speed up the computation of [r.mfilter]{.style-function} considerably. However, when a MASK is set, parallel processing is disabled. So, make sure to remove the MASK first.
+2. With [nprocs]{.style-parameter} you set the number of threads for parallel computing. Change the number to fit your system. 
+
+## {{< fa brands python >}}
+
+``` python
+# Remove the mask
+gs.run_command("r.mask", flags="r")                                # <1>
+
+# Compute the focal statistics
+gs.run_command(
+    "r.mfilter",
+    input="DHSI_shelter",
+    output="DHSI_shelterS",
+    filter="QHSwaf_30m.txt",
+    nprocs=4,                                                     # <2>
+)
+gs.run_command(
+    "r.mfilter",
+    input="DHSI_food",
+    output="DHSI_foodS",
+    filter="QHFwaf_30m.txt",
+    nprocs=4, 
+)
+```
+1. Parallel processing can speed up the computation of [r.mfilter]{.style-function} considerably. However, when a MASK is set, parallel processing is disabled. So, make sure to remove the MASK first.
+2. With [nprocs]{.style-parameter} you set the number of threads for parallel computing. Change the number to fit your system. 
+:::
+
+Remember that in paragraph [-@sec-relassification], areas classified as _water_ in the [NLCD raster]{.style-data} layer were assigned a _null_ value in the [DHSI_shelter]{.style-data} and [DHSI_food]{.style-data} raster layers. Because _null_ cells are ignored by [r.mfilter]{.style-function}, the presence of water has no influence on the suitability of its surroundings, and vice versa. This meets the second assumption mentioned at the beginning of this section.
+
+## Habitat suitability index
+
+To create the final deer habitat suitability index (DHSI), use the [r.series](https://grass.osgeo.org/grass-stable/manuals/r.series.html) function to calculate the minimum of QHF and QHF scores applied to each pixel in the landscape. 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+# Combine the layers
+r.series input=DHSI_shelterS,DHSI_foodS, \
+output=HSI_tmp, method=minimum nprocs=4            # <1>
+```
+1. With [nprocs]{.style-parameter} you set the number of threads for parallel computing. Change the number to fit your system. 
+
+## {{< fa brands python >}}
+
+``` python
+# Combine the layers
+gs.run_command(
+    "r.series",
+    input=["DHSI_shelterS", "DHSI_foodS"],
+    output="HSI_tmp",
+    method="minimum",
+    nprocs=4                                     # <1>
+)
+```
+1. With [nprocs]{.style-parameter} you set the number of threads for parallel computing. Change the number to fit your system. 
+:::
+
+
+## Infrastructure & water
+
+In the raster layer created in the previous sections, roads, buildings, and other built-up areas may have gotten a score > 0, depending on their surroundings. To ensure that all build-up areas have a suitability score of 0, convert the various infrastructure vector layers you imported earlier (@sec-infrastructure or [-@sec-infrastructure2]) to raster layers using the [v.to.rast](https://grass.osgeo.org/grass83/manuals/v.to.rast.html) function. Use the [use]{.style-parameter} and [value]{.style-parameter} parameters to assign the value _0_ to the various features in the resulting raster layers. The [-d]{.style-parameter} flag is to densify line features (see the manual page for details).
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+v.to.rast input=buildings output=buildings \
+use=val value=0 memory=1000                      # <1>
+
+v.to.rast input=railways output=railways \
+use=val value=0 memory=1000  
+
+v.to.rast input=roads output=roads \
+use=val value=0 memory=1000  
+
+v.to.rast input=traffic output=traffic \
+use=val value=0 memory=1000  
+
+```
+1. Increasing the memory (in MB) to be used will speed up your calculations. Change this according to your system's memory. If you don't know, [see here](https://www.pcworld.com/article/395053/how-to-tell-what-kind-of-ram-you-have.html) how to check your system's memory. 
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "v.to.rast",
+    input="buildings",
+    output="buildings",
+    use="val",
+    value=0,
+    memory=1000,       # <1>
+)
+gs.run_command(
+    "v.to.rast",
+    flags="d",
+    input="railways",
+    output="railways",
+    use="val",
+    value=0,
+    memory=1000,
+)
+gs.run_command(
+    "v.to.rast",
+    flags="d",
+    input="roads",
+    output="roads",
+    use="val",
+    value=0,
+    memory=1000,
+)
+gs.run_command(
+    "v.to.rast",
+    input="traffic",
+    output="traffic",
+    use="val",
+    value=0,
+    memory=1000,
+)
+```
+1. Increasing the memory (in MB) to be used will speed up your calculations. Change this according to your system's memory. If you don't know, [see here](https://www.pcworld.com/article/395053/how-to-tell-what-kind-of-ram-you-have.html) how to check your system's memory. 
+:::
+
+The next step is to combine the various raster layers you created in the previous step with the [HSI_tmp]{.style-data} using the [r.patch](https://grass.osgeo.org/grass-stable/manuals/r.patch.html) function. This function will take the values of the first raster layer in the provided list ([buildup]{.style-data}), and if that layer has "no data" cells, the values of the second raster layer ([HSI_temp]{.style-data}) are used for these cells. 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+r.patch input=buildings,railways,roads,traffic,HSI_tmp \
+output=HSI_tmp2 \
+memory=1000 \               # <1>
+nprocs=4                    # <2>
+```
+1. Increasing the memory (in MB) to be used will speed up your calculations. Change this according to your system's memory. If you don't know, [see here](https://www.pcworld.com/article/395053/how-to-tell-what-kind-of-ram-you-have.html) how to check your system's memory. 
+2. With [nprocs]{.style-parameter} you set the number of threads for parallel computing. Change the number to fit your system. 
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "r.patch",
+    input=[
+        "buildings",
+        "railways",
+        "roads",
+        "traffic",
+        "HSI_tmp",
+    ],
+    output="HSI_tmp2",
+    memory=1000,   # <1>
+    nprocs=4,      # <2>
+)
+```
+1. Increasing the memory (in MB) to be used will speed up your calculations. Change this according to your system's memory. If you don't know, [see here](https://www.pcworld.com/article/395053/how-to-tell-what-kind-of-ram-you-have.html) how to check your system's memory. 
+2. With [nprocs]{.style-parameter} you set the number of threads for parallel computing. Change the number to fit your system.  
+:::
+
+And, to get the final habitat suitability layer for the White-tailed deer, assign the value 0 to all areas with water, and no data to all areas outside the boundaries of the state.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+r.mask vector=Minnesota_bdry
+r.mapcalc expression="HSI_deer = if(NLCD_2016==11,0,HSI_tmp2)"
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command("r.mask", vector="Minnesota_bdry")
+gs.run_command("r.mapcalc", expression="HSI_deer = if(NLCD_2016==11,0,HSI_tmp2)")
+```
+:::
+
+As a final step, remove all intermediate layers.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+g.remove -f type=vector,raster \
+name=buildings,railways,roads,traffic,HSI_tmp,HSI_tmp2, DHSI_shelter,DHSI_food,DHSI_foodS,DHSI_shelterS,deer_tmp
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "g.remove",
+    flags="f",
+    type="raster",
+    name=[
+        "buildings",
+        "railways",
+        "roads",
+        "traffic",
+        "HSI_tmp",
+        "HSI_tmp2",
+        "DHSI_shelter",
+        "DHSI_food",
+        "DHSI_foodS",
+        "DHSI_shelterS",
+        "deer_tmp",
+    ],
+)
+```
+:::
+
+## Climate
+
+There are other factors that influence the suitability of an area for white-tailed deer. One of these is climate, and more specifically, the winter severity, which determines the northernmost limit of the species distribution[@kennedy-slaney2018]. In general, the species is well adapted to survive Minnesota's cold, snowy winters. However, severe winters, which occur every so many years in the north of the state, can increase deer mortality, thus influencing population densities [@mndnr2021].
+
+We did not take winter severity, nor other potentially important factors such as hunting, into account, as this can differ from year to year. In addition, these factors are already considered in the density estimates per deer permit area (DPA) dataset that we used to create the deer density distribution map (@sec-dhc).
+
+#### :x invisible1 {.unnumbered}
+If you run the analysis with a 60-meter resolution, use the matrix weight files [QHFwaf_60m.txt](share/QHFwaf_60m.txt) and [QHSwaf_60m.txt](share/QHSwaf_60m.txt) instead. For any other resolution, you need to create the appropriate matrix weight files yourself. You can do this using the Python script [compute rmfilter.py](share/compute_rmfilter.py). 
+
+#### {.unnumbered}
+
+```{=html}
+<!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
+<script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
+<script>
+  /* paste this line in verbatim */
+  window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
+  /* customize formbutton below*/     
+  formbutton("create", {
+    action: "https://formspree.io/f/xjvppyvg",
+    title: "Feedback", 
+    fields: [
+      { 
+        type: "email", 
+        label: "Email:", 
+        name: "email",
+        required: true,
+        placeholder: "your@email.com"
+      },
+      {
+        type: "hidden",
+        label: "",
+        value: "distribution white tailed deer - page 4",
+      },
+      {
+        type: "textarea",
+        label: "Message:",
+        name: "message",
+        placeholder: "Question or feedback? Let us know here.",
+      },
+      { type: "submit" }      
+    ],
+    styles: {
+      title: {
+        backgroundColor: "#57B444"
+      },
+      button: {
+        backgroundColor: "#57B444"
+      }
+    }
+  });
+</script>
+
+```
+
+

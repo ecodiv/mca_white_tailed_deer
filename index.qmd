@@ -1,0 +1,18 @@
+---
+format:
+  html:
+    toc: false
+---
+
+# Welcome {.unnumbered}
+
+In this tutorial, you will create a habitat suitability map of the [white-tailed deer](https://en.wikipedia.org/wiki/White-tailed_deer) (*Odocoileus virginianus*) in Minnesota, USA. You do this by combining information about the habitat preferences of the white-tailed deer and existing coarse scale data of deer densities.
+
+> The tutorial aims to introduce some common and perhaps some less common functions and techniques you can use to carry out a simple multi-criteria analysis in GRASS GIS.
+
+For those not familiar with GRASS GIS, it offers a wide range of tools for terrain and ecosystem modeling, hydrology, management, and analysis of geospatial data, and the processing of satellite and aerial imagery. It comes with a temporal framework for advanced time series processing and a Python API for rapid geospatial programming. [Read more here...](https://grass.osgeo.org/)
+
+This tutorial provides a step-by-step explanation of the analysis, with code you can run from the command line or as a Python script. The functions can also be invoked from the GUI menu or Tools tab if you prefer that. For [QGIS](https://qgis.org/) users, note that most grass functions used in this tutorial are also [available](https://docs.qgis.org/3.34/en/docs/user_manual/grass_integration/grass_integration.html) in QGIS. If you are more familiar with ArcGIS, check out the page [GRASS GIS for ArcGIS users](https://grasswiki.osgeo.org/wiki/GRASS_GIS_for_ArcGIS_users) to get a grasp of the main GRASS GIS concepts you should know about.
+
+
+

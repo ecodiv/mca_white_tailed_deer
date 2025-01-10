@@ -1,0 +1,32 @@
+---
+date-modified: ""
+---
+
+# Functions
+
+All functions used in this tutorial are listed below. Check out the manual pages for more information and examples of how these functions can be used. When going through the examples in this tutorial, it is important to realize that often there are multiple ways to achieve the same. 
+
+::: {.functionlist}
+
+* [db.in.ogr](https://grass.osgeo.org/grass-stable/manuals/db.in.ogr.html): Imports attribute tables in various formats. 
+* [g.region](https://grass.osgeo.org/grass-stable/manuals/g.region.html): Manages the boundary definitions for the geographic region. 
+* [r.in.gdal](https://grass.osgeo.org/grass-stable/manuals/r.in.gdal.html): Imports raster data into a GRASS raster map using GDAL library. 
+* [r.area](https://grass.osgeo.org/grass-stable/manuals/addons/r.area.html): Calculates area of clumped areas and remove areas smaller or greater than given threshold. 
+* [r.grow.distance](https://grass.osgeo.org/grass-stable/manuals/r.grow.distance.html): Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell. 
+* [r.mask](https://grass.osgeo.org/grass-stable/manuals/r.mask.html): Creates a MASK for limiting raster operation. 
+* [r.mfilter](https://grass.osgeo.org/grass-stable/manuals/r.mfilter.html): Performs raster map matrix filter. 
+* [r.null](https://grass.osgeo.org/grass-stable/manuals/r.null.html): Manages NULL-values of given raster map, such as replacing null values with an user-defined value.
+* [r.recode](https://grass.osgeo.org/grass-stable/manuals/r.recode.html): Recodes categorical raster maps. Here we use it to recodes the land use map (nominal) to suitability maps (ratio).
+* [r.recode.attr](https://grass.osgeo.org/grass-stable/manuals/addons/r.recode.attr.html): Recode raster using attribute table (csv file) as input. 
+* [g.remove](https://grass.osgeo.org/grass-stable/manuals/g.remove.html): Removes data base element files from the user's current mapset using the search pattern. 
+* [r.resample.stats](https://grass.osgeo.org/grass-stable/manuals/r.resamp.stats.html): Resamples raster map layers to a coarser grid using aggregation. 
+* [r.series](https://grass.osgeo.org/grass-stable/manuals/r.series.html): Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers. 
+* [r.stats](https://grass.osgeo.org/grass-stable/manuals/r.stats.html): Generates area statistics for raster map. 
+* [r.stats.zonal](https://grass.osgeo.org/grass-stable/manuals/r.stats.zonal.html): Calculates category or object oriented statistics (accumulator-based statistics). 
+* [r.quantile](https://grass.osgeo.org/grass-stable/manuals/r.quantile.html): Compute quantiles using two passes. 
+* [v.db.join](https://grass.osgeo.org/grass-stable/manuals/v.db.join.html): Joins a database table to a vector map attibute table. 
+* [v.extract](https://grass.osgeo.org/grass-stable/manuals/v.extract.html): Selects vector features from an existing vector map and creates a new vector map containing only the selected features. 
+* [v.in.ogr](https://grass.osgeo.org/grass-stable/manuals/v.in.ogr.html): Imports vector data into a GRASS vector map using OGR library. 
+* [v.to.rast](https://grass.osgeo.org/grass-stable/manuals/v.to.rast.html): Converts (rasterize) a vector map into a raster map. 
+
+:::

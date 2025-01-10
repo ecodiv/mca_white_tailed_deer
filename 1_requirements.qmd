@@ -1,0 +1,521 @@
+# Getting started
+
+This tutorial is for users who are familiar with GRASS GIS. If you are not, you are encouraged to first check out the [General overview](https://grass.osgeo.org/learn/overview/), the [First time users](https://grass.osgeo.org/learn/newcomers/) page, and the list of [tutorials](https://grass.osgeo.org/learn/tutorials/) on the GRASS GIS website. And for those who are well versed in GIS, but new to GRASS GIS, have a look at these [tips](https://grasswiki.osgeo.org/wiki/GRASS_migration_hints).
+
+In the tutorial, you'll be introduced to several functions. The tutorial will show how to use the functions, but will not (always) explain the settings and parameters. Instead, each time a function is used, a link is provided to the corresponding help page. These help pages are quite good, and you are encouraged to read them to fully understand the choices made in the tutorial. 
+
+## Interface
+
+::: {.column-margin}
+![Run code from the console (1) or terminal (4). Run Python code from the Python console (2) or Python editor (3).](images/console_gui.png){#fig-gui}
+:::
+
+The examples in this tutorial show you how to run functions from the terminal or the Console tab of the GUI. If you prefer to run the analysis in Python, you can use the GRASS Python Scripting Library from the Python command line (go to the [Python]{.style-menu} tab) or using the [Python editor]{.style-menu} (@fig-gui). The first step is to import the [grass.script]{.style-library} library. In the code below, it is imported as [gs]{.style-function}. Next, you can run GRASS GIS functions using the [run_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.run_command). The general syntax is:
+
+::: {.panel-tabset}
+## {{< fa brands python >}}
+
+``` python
+import grass.script as gs
+gs.run_command(
+    "module.name",
+    option1="...",
+    option2="...",
+    flags="flagletters",
+)
+```
+:::
+
+For example, you can use the following code to print the region settings (extent, resolution) and save them under the name 'myregion'.
+
+::: {.panel-tabset}
+
+## {{< fa brands python >}}
+``` python
+import grass.script as gs
+gs.run_command('g.region', flags='p', save="myregion")
+```
+:::
+
+There are also other functions besides [run_command]{.style-function}, including [read_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.read_command), [write_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.write_command) and [parse_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.parse_command). Read more about the Python interface to scripting and the differences between the functions in [the manual](https://grasswiki.osgeo.org/wiki/GRASS_Python_Scripting_Library).
+
+For your analyses, you are encouraged to use the command line or Python code, as these facilitate reproducibility, make it easy to automate your work, and quickly test small changes and tweaks. However, using the GUI can be a good way to further explore the various options a function offers. And note that it always shows you the corresponding code, which you can copy for later use. 
+
+All functions can also be invoked from the GUI menu or [Tools]{.style-menu} tab. Alternatively, you can type in the name of the function in the [Console]{.style-menu} tab or in the [terminal]{.style-program} and hit enter. This will open the function's window (@fig-gui). 
+
+## Database {#sec-datamanagement}
+
+GRASS GIS works with special databases, which you can access from the [Data Catalog]{.style-menu}. The GRASS GIS has a hierarchical structure consisting of Database ![](images/grassdb.png), Project ![](/images/location.png) and Mapset ![](images/mapset.png). Note that in GRASS GIS versions prior to 8.4, Projects were called Locations. If you are not familiar with the GRASS GIS database, you are encouraged to read [this overview](https://grass.osgeo.org/grass83/manuals/grass_database.html).
+
+A project is defined by its coordinate reference system ([CRS](https://en.wikipedia.org/wiki/Spatial_reference_systeme)). This means that all the data it holds is in the same CRS. In general, if your data comes in a specific CRS, you should create a Project corresponding to that CRS. Alternatively, you can reproject data *on-the-fly* during importing. Read [this page](https://grasswiki.osgeo.org/wiki/Map_Reprojection) for different options.
+
+::: {.column-margin}
+![GRASS GIS Database structure as visible to the user](images/grassgis_db_structuur.svg){#fig-grassgisdatabasestructuur2}
+:::
+
+Each project can have many Mapset, which contain the actual data, mostly geospatial data, referred to as maps in GRASS GIS. Mapsets provide a way to organize maps transparently, as well as a tool for isolating different tasks to prevent data loss. When creating a new Project, GRASS GIS automatically creates a special Mapset called PERMANENT where the core data for the project can be stored. This is the only mapset that is obligatory. Read the [GRASS GIS Quickstart](https://grass.osgeo.org/grass-stable/manuals/helptext.html) to learn more.
+
+::: {.panel-tabset}
+
+## {{< fa regular comment >}}
+For this tutorial, create a new Project with the coordinate reference system (CRS) [NAD83]{.style-input} with projection [UTM zone 15N ([EPSG 26915](https://epsg.io/26915))]{.style-input}. The first video shows you how to add a new Project to an existing GRASS GIS database. The second video shows you how to create a new GRASS GIS database, Project and Mapset.
+
+## {{< fa solid film >}}
+
+{{< video https://ecodiv.earth/share/suitable_regions/newgrassgisproject.mp4 >}}
+
+## {{< fa solid film >}}
+
+{{< video https://ecodiv.earth/share/suitable_regions/newgrassgisdatabase.mp4 >}}
+
+:::
+
+Now that you have created a Project, create a mapset [WhitetailedDeer]{.style-storage}. You can create a new mapset in the current mapset using the button ![](images/mapset-add.png) in the Data catalog toolbar or using the menu [Settings 	&rarr; GRASS working environments 	&rarr; Create new mapset]{.style-menu}. Alternatively, you can create a new mapset from the command line.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+g.mapset -c mapset=WitetailedDeer
+```
+
+## {{< fa brands python >}}
+
+``` python
+import grass.script as gs
+gs.run_command("g.mapset", flags="c", mapset="WhitetailedDeer")
+```
+:::
+
+You'll see that when you create a new mapset, GRASS GIS will switch automatically to that mapset. That means that if you run an analysis, the results will be stored in the new mapset. 
+
+## Region & Mask
+
+The [region](https://grasswiki.osgeo.org/wiki/Computational_region) is an important concept in GRASS GIS, that allows you to fully control the extent and resolution of your raster computations. All raster computations will be performed in the specified extent and with the given resolution to ensure consistency. This makes it easy to subset larger extent data for quicker testing of analysis, or to run an analysis of specific regions given by, e.g., administrative units. 
+
+::: {.column-margin}
+![When a MASK is set, parallel processing is disabled. That means that if you want to use for example the [r.mfilter]{.style-functin} using multiple threads, and you want to limit the computation to a certain area, you need to create an intermediate layer first, and use that as input.](images/explain_mask_r_mapcalc.svg){#fig-maskparallel}
+:::
+
+Another important tool is the MASK. This is a raster map that defines areas to include or exclude in analyses or operations. A MASK is typically created from an existing raster map using the [r.mask](https://grass.osgeo.org/grass-stable/manuals/r.mask.htm) function. Once a MASK is set, any raster operation (e.g., map algebra, resampling, or any raster processing) will only consider the cells within the masked area. Operations ignore cells outside this area as if they were null. 
+
+## Data Minnesota {#sec-datasets}
+
+For this tutorial, the analysis will be carried out for Minnesota. Alternatively, to make the analysis run faster, you can limit the areas for which you carry out the analysis. In that case, skip this section, and go to @sec-subsection.
+
+For this tutorial, the assumption is that you copy all required input files to the working directory. On the command line, use the [cd](https://www.geeksforgeeks.org/cd-cmd-command/) command to set the working directory. In Python, you can change the working directory using the [os.chdir]{.style-function} command. See here for [how to do this](https://linuxize.com/post/python-get-change-current-working-directory/). 
+
+### Boundary layer {#sec-minnbound}
+
+First step is to download the vector layer with the state boundary of Minnesota. Go to the [download page](https://gisdata.mn.gov/dataset/bdry-state-of-minnesota), download the OGC GeoPackage from there and unzip it to your working directory. Next, use [v.in.ogr](https://grass.osgeo.org/grass-stable/manuals/v.in.ogr.html) to import the layer in GRASS GIS.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+# Import
+v.in.ogr input=bdry_state_of_minnesota.gpkg \
+layer=state_of_minnesota output=Minnesota_bdry
+
+```
+
+## {{< fa brands python >}}
+
+``` python
+# Import
+gs.run_command(
+    "v.in.ogr",
+    input="bdry_state_of_minnesota.gpkg",
+    layer="state_of_minnesota",
+    output="Minnesota_bdry",
+)
+```
+:::
+
+Now, set the region to match the extent of the vector layer you just imported. This will help you to limit the import of other layers to the extent of Minnesota.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+# Set the region
+g.region vector=Minnesota_bdry
+
+```
+
+## {{< fa brands python >}}
+
+``` python
+# Set the region
+gs.run_command("g.region", vector="Minnesota_bdry")
+```
+:::
+
+### Land cover
+One of the main data layers you are going to work with is the National Land Cover Database (NLCD) of the USA. You can download the NLCD layer for Minnesota from the Minnesota GIS portal. There are [:various versions](#x-varversions). The examples in this tutorial are based on the NLCD for 2016, which you can [download here](https://gisdata.mn.gov/dataset/biota-landcover-nlcd-mn-2016) as a geoTIF raster layer.
+
+Next, use the functions [r.in.gdal](https://grass.osgeo.org/grass-stable/manuals/r.in.gdal.html) to import the raster data in GRASS GIS. The raster layer covers an area larger than Minnesota. You should therefore set the [-r]{.style-parameter} flag to limit the import to the computational region. Note that because [r.in.gdal]{.style-function} does not change the resolution and alignment of the original layer, the extent of the imported layer may be slightly larger than the regional extent. 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+# Import land use map
+r.in.gdal input=NLCD_2016_Land_Cover.tif output=NLCD_2016
+
+# Import the boundary maps
+r.in.ogr input=bdry_state_of_minnesota.gpkg \
+layer=state_of_minnesota output=Minnesota_state
+```
+
+## {{< fa brands python >}}
+
+``` python
+# Import land use map
+gs.run_command(
+    "r.in.gdal",
+    flags="r",
+    input="NLCD_2016_Land_Cover.tif",
+    output="NLCD_2016",
+)
+```
+:::
+
+Use the [g.region](https://grass.osgeo.org/grass83/manuals/g.region.html) function again to set the region to exactly match the extent and resolution of the [NLCD_2016]{.style-data} raster layer. This will ensure that all subsequent raster calculations will be carried out using the right resolution and extent.  
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+g.region -a raster=NLCD_2016
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "g.region",
+    flags="a",
+    raster="NLCD_2016",
+)
+```
+:::
+
+### Infrastructure {#sec-infrastructure}
+
+You will also need a dataset of the infrastructure and buildings of Minnesota. For this tutorial, you'll use the [Openstreetmap data](https://www.openstreetmap.org/#map=7/46.356/-93.591).  Geofrabric offers a convenient free download server where you can download OSM data for the [individual USA states](http://download.geofabrik.de/north-america/us.html). 
+
+Download the zip file with shapefiles for Minnesota and unzip the layers in your working directory. The zip files include various Shapefiles. Import the layers [gis_osm_buildings_a_free_1]{.style-data}, [gis_osm_railways_a_free_1]{.style-data}, [gis_osm_roads_a_free_1]{.style-data} and [gis_osm_traffic_a_free_1]{.style-data}. The data is in latlon (EPSG 4326) so you need to use the [r.import](https://grass.osgeo.org/grass-stable/manuals/r.import.html) function. This will reproject your data on-the-fly during import.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+v.import input=gis_osm_buildings_a_free_1.shp output=buildings
+v.import input=gis_osm_railways_free_1.shp output=railways
+v.import input=gis_osm_roads_free_1.shp output=railways
+v.import input=gis_osm_traffic_a_free_1.shp output=railways
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "v.import",
+    input="gis_osm_buildings_a_free_1.shp",
+    output="buildings",
+)
+
+gs.run_command(
+    "v.import",
+    input="gis_osm_railways_free_1.shp",
+    output="railways",
+)
+
+gs.run_command(
+    "v.import",
+    input="gis_osm_roads_free_1.shp",
+    output="roads",
+)
+
+
+gs.run_command(
+    "v.import", input="gis_osm_traffic_a_free_1.shp", output="traffic"
+)
+```
+:::
+
+In the rest of the tutorial, the analyses are carried out for the whole state, at a resolution of 30m. If that is OK, skip the next section. If you want to run the analysis for a smaller area, follow the example in the next section (@sec-subsection).
+
+## Data counties {#sec-subsection}
+
+Some steps of the analysis will take quite some time. To make the analysis run faster, you can set a lower resolution and/or define a smaller region for which we carry out the analysis. This section shows you how to limit your data import and analyses to the extent of the counties _Otter Tail_, _Douglas_, _Grant_, _Todd_ and _Wadena_. 
+
+For this tutorial, the assumption is that you copy all required input files to the working directory. On the command line, use the [cd](https://www.geeksforgeeks.org/cd-cmd-command/) command to set the working directory. In Python, you can change the working directory using the [os.chdir](https://linuxize.com/post/python-get-change-current-working-directory/) command.
+
+### Boundaries {#sec-boundaries2}
+
+First, download the vector layer with the Minnesota counties as a GeoPackage [from here](https://gisdata.mn.gov/dataset/bdry-counties-in-minnesota). Copy the data to your working directory, and import the layer in GRASS GIS.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+You can import the entire layer using [v.in.ogr](https://grass.osgeo.org/grass-stable/manuals/v.in.ogr.html), and next, select the required subset using the [v.extract](https://grass.osgeo.org/grass-stable/manuals/v.extract.html) function.
+
+``` bash
+# Import
+v.in.ogr input=bdry_counties_in_minnesota.gpkg \
+layer=mn_county_boundaries output=Minnesota_counties
+
+# Select
+v.extract input=Minnesota_counties 
+where="CTY_NAME = 'Otter Tail' OR CTY_NAME = 'Douglas' OR  CTY_NAME = 'Grant' OR CTY_NAME = 'Todd' OR  CTY_NAME = 'Wadena'" output=study_area
+
+```
+Alternatively, you can limit your import to those counties you are interested in directly using the [where]{.style-parameter} parameter.
+
+``` bash
+v.in.ogr input=bdry_counties_in_minnesota.gpkg \
+layer=mn_county_boundaries output=Minnesota_counties \
+where="CTY_NAME = 'Otter Tail' OR CTY_NAME = 'Douglas' OR  CTY_NAME = 'Grant' OR CTY_NAME = 'Todd' OR  CTY_NAME = 'Wadena'"
+```
+
+## {{< fa brands python >}}
+
+You can import the whole layer using [v.in.ogr](https://grass.osgeo.org/grass-stable/manuals/v.in.ogr.html), and next, select the required subset using the [v.extract](https://grass.osgeo.org/grass-stable/manuals/v.extract.html) function.
+
+``` python
+# Import
+gs.run_command(
+    "v.in.ogr",
+    input="bdry_counties_in_minnesota.gpkg",
+    layer="mn_county_boundaries",
+    output="Minnesota_counties",
+)
+
+# Select subset
+gs.run_command(
+    "v.extract",
+    input="Minnesota_counties",
+    where=(
+        "CTY_NAME = 'Otter Tail' OR "
+        "CTY_NAME = 'Douglas' OR "
+        "CTY_NAME = 'Grant' OR "
+        "CTY_NAME = 'Todd' OR  "
+        "CTY_NAME = 'Wadena'"
+    ),
+    output="study_area",
+)
+```
+
+Alternatively, you can limit your import to those counties you are interested in directly using the [where]{.style-parameter} parameter.
+
+``` python
+# Import
+gs.run_command(
+    "v.in.ogr",
+    input="bdry_counties_in_minnesota.gpkg",
+    layer="mn_county_boundaries",
+    where=("CTY_NAME = 'Otter Tail' OR "
+           "CTY_NAME = 'Douglas' OR  "
+           "CTY_NAME = 'Grant' OR "
+           "CTY_NAME = 'Todd' OR  "
+           "CTY_NAME = 'Wadena'"),
+    output="study_area2",
+)
+```
+:::
+
+Now, use the [g.region](https://grass.osgeo.org/grass83/manuals/g.region.html) function to set the regional extent to match the extent of the selected counties. 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+g.region vector=study_area
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command("g.region", vector="study_area")
+```
+:::
+
+### Land cover {#sec-landcover2}
+
+One of the main data layers you are going to work with is the National Land Cover Database (NLCD) of the USA. You can download the NLCD layer for Minnesota from the Minnesota GIS portal. There are [:various versions](#x-varversions). The examples in this tutorial are based on the NLCD for 2016, which you can [download here](https://gisdata.mn.gov/dataset/biota-landcover-nlcd-mn-2016) as a geoTIF raster layer.
+
+Next, use the functions [r.in.gdal](https://grass.osgeo.org/grass-stable/manuals/r.in.gdal.html) to import the raster data in GRASS GIS. Set the [-r]{.style-parameter} flag to limit the import to the computational region. Note that because [r.in.gdal]{.style-function} does not change the resolution and alignment of the original layer, the extent of the imported layer may be slightly larger than the regional extent. 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+# Import land use map
+r.in.gdal -r input=NLCD_2016_Land_Cover.tif output=NLCD_2016_30m
+```
+
+## {{< fa brands python >}}
+
+``` python
+# Import land use map
+gs.run_command(
+    "r.in.gdal",
+    flags="r",
+    input="NLCD_2016_Land_Cover.tif",
+    output="NLCD_2016_30m",
+)
+```
+:::
+
+Another way to reduce the computation time is to work with a lower resolution. Use the [g.region]{.style-function} function again, and this time use the [res]{.style-parameter} parameter to set the resolution to 60 meters. Use the [-a]{.style-parameter} flag to align region to resolution (this ensures the resolution will be exactly as requested).
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+g.region -a -p res=60 raster=NLCD_2016
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command("g.region", flags="ap", res=60, raster="NLCD_2016")
+```
+:::
+
+All raster calculations in GRASS GIS use the resolution as defined with the computation region. If the resolution of an input raster differs from the resolution of the computational region, GRASS GIS will resample the input raster to the cell resolution of the computational region 'on-the-fly' while carrying out raster calculations. By default, it will use the [:nearest neighbor method](#x-nearestneighbor)
+
+For categorical maps such as the [NLCD_2016]{.style-data} raster layer, it is usually more appropriate to use the [mode](#x-mode) of the input cells that intersect the output cell. Therefore, use the [r.resample.stats](https://grass.osgeo.org/grass-stable/manuals/r.resamp.stats.html) function to resample the NLCD layer to the desired resolution. Set the [method]{.style-parameter} to [mode]{.style-input}. Optionally, you can set the [-w]{.style-parameter} flag. With this option, the values from each input cell is weighted according to how much the input cell overlaps with the output cell. This is slower, but produces a more accurate result. 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+r.resamp.stats -w input=NLCD_2016_30m output=NLCD_2016 method=mode
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "r.resamp.stats",
+    flags="w",
+    input="NLCD_2016_30m",
+    output="NLCD_2016",
+    method="mode",
+)
+```
+:::
+
+### Infrastructure {#sec-infrastructure2}
+
+You will also need a dataset of the infrastructure and buildings of Minnesota. For this tutorial, you'll use the [Openstreetmap data](https://www.openstreetmap.org/#map=7/46.356/-93.591).  Geofrabric offers a convenient free download server where you can download OSM data for the [individual USA states](http://download.geofabrik.de/north-america/us.html). 
+
+Download the zip file with Shapefiles for Minnesota and unzip the layers in your working directory. The zip files include various Shapefiles. Import the layers [gis_osm_buildings_a_free_1]{.style-data}, [gis_osm_railways_a_free_1]{.style-data}, [gis_osm_roads_a_free_1]{.style-data} and [gis_osm_traffic_a_free_1]{.style-data}. The data is in latlon (EPSG 4326) so you need to use the [r.import](https://grass.osgeo.org/grass-stable/manuals/r.import.html) function. This will reproject your data on-the-fly during import. Use the [extent]{.style-parameter} parameter to limit the import to the current computational region.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+v.import input=gis_osm_buildings_a_free_1.shp output=buildings extent=region
+v.import input=gis_osm_railways_free_1.shp output=railways extent=region
+v.import input=gis_osm_roads_free_1.shp output=railways extent=region
+v.import input=gis_osm_traffic_a_free_1.shp output=railways extent=region
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "v.import",
+    input="gis_osm_buildings_a_free_1.shp",
+    output="buildings",
+    extent="region",
+)
+
+gs.run_command(
+    "v.import", input="gis_osm_railways_free_1.shp", output="railways", extent="region"
+)
+
+gs.run_command(
+    "v.import", input="gis_osm_roads_free_1.shp", output="roads", extent="region"
+)
+
+gs.run_command(
+    "v.import", input="gis_osm_traffic_a_free_1.shp", output="traffic", extent="region"
+)
+```
+:::
+
+In the next sections, you will map the (suitability) distribution of the White tailed deer. If you have prepared the data following the steps in this section, you will do this for an area covering the counties _Otter Tail_, _Douglas_, _Grant_, _Todd_ and _Wadena_, at a resolution of 60 meter. If you have prepared your data according to the steps in @sec-datasets, you will create a suitability map for the state of Minnesota, at a resolution of 30m.
+
+
+#### :x varversions {.unnumbered}
+Like the 2019 version, which you can download [here](https://gisdata.mn.gov/dataset/biota-landcover-nlcd-mn-2019). If you want to use that layer, you probably also want to get the more recent numbers for deer densities as well (see @sec-deerdensitydata).
+
+#### :x mode {.unnumbered}
+The _mode_, also called _majority resampling_, is the most frequently occurring value of the input cells that intersect the output cell.  Read more about this and alternative resampling techniques [here](https://gisgeography.com/raster-resampling/).
+
+#### :x nearestneighbor {.unnumbered}
+The _nearest neighbor_ technique doesn’t change any of the values from the input raster data set. It takes the cell center from the input raster data set to determine the closest cell center of the output raster. For processing speed, it’s generally the fastest because of its simplicity. Read more about this and alternative resampling techniques [here](https://gisgeography.com/raster-resampling/). 
+
+### {.unnumbered}
+
+```{=html}
+<!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
+<script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
+<script>
+  /* paste this line in verbatim */
+  window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
+  /* customize formbutton below*/     
+  formbutton("create", {
+    action: "https://formspree.io/f/xjvppyvg",
+    title: "Feedback", 
+    fields: [
+      { 
+        type: "email", 
+        label: "Email:", 
+        name: "email",
+        required: true,
+        placeholder: "your@email.com"
+      },
+      {
+        type: "hidden",
+        label: "",
+        value: "distribution white tailed deer - page 2",
+      },
+      {
+        type: "textarea",
+        label: "Message:",
+        name: "message",
+        placeholder: "Question or feedback? Let us know here.",
+      },
+      { type: "submit" }      
+    ],
+    styles: {
+      title: {
+        backgroundColor: "#57B444"
+      },
+      button: {
+        backgroundColor: "#57B444"
+      }
+    }
+  });
+</script>
+
+```
+

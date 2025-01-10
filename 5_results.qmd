@@ -1,0 +1,16 @@
+---
+date-modified: ""
+---
+
+# Results
+
+During our exercise, we made several assumptions about the habitat suitability and how this affects the distribution of the white-tailed deer. And we ignored other potentially important factors, such as hunting and the effects of predators. Some factors, such as winter conditions, were included in the estimates of deer densities per DPA from Norton and Giudice [@norton2017]. But that means we made the implicit assumption that those factors have a uniform influence on deer densities across the DPA. 
+
+![Map with estimated relative deer population densities.](/images/SADf.png){#fig-SADf fig-align="left" width="600px"}
+
+In real life, you will often have to make many assumptions as well. That's what makes it essential to document all your steps, including the assumptions made. The great thing about GRASS GIS is that it is so easy to provide the code, making the analysis more transparent, unambiguous, and reproducible. And because all steps are automated, it is relatively easy to test how sensitive the outcome is to small changes in the parameters or data (sensitivity analysis). You can do this yourself; just make some changes in the code and see how or where that changes the outcome and to what extent.
+
+
+
+
+

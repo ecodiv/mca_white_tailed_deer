@@ -1,0 +1,165 @@
+# Deer densities {#sec-dhc}
+
+For this tutorial, you'll be using deer density estimates for Minnesota for the years 2010-2017[@norton2017]. The densities are provided per deer permit area ([DPA](https://www.dnr.state.mn.us/hunting/deer/map.html)). These are areas with similar habitat, land uses, deer populations, and deer hunter distribution. 
+
+![The steps to create the map with deer harvest numbers per deer permit area that you will carry out in this section; a spatial join of a table with suitability scores per DPA and the map of DPA's, and a spatial interpolation to fill in gaps on the map.](images/deer densities.png){#fig-deerdensitiescap5 fig-align="left" width=650}
+
+## Get the data {#sec-deerdensitydata}
+
+The first step is to extract the table with the deer densities from the [PDF file](https://files.dnr.state.mn.us/wildlife/deer/reports/popmodel/popmodel_2017.pdf) and reformat it to get a table with one column with the PDA id's and the other columns with the deer densities for the different years. In addition, we are working with the metric system, so we need to convert the numbers from deer/mi$^2$ need to deer/km$^2$. 
+
+To save you the trouble, I have already done this for you. You can download the [zip file](share/DPA_deer_densities.zip) with the CSV file [DPA_deer_densities.csv]{.style-filename} and the accompanying [DPA_deer_densities.csvt]{.style-filename} file. The latter is to ensure the columns of the CSV file are imported with the proper type (see [here](https://gdal.org/drivers/vector/csv.html) for more information). Unzip both files in your working directory.
+
+The table gives the density estimates per PDA, so you'll need a map with the DPA boundaries to map the deer densities. On the Minnesota [Geospatial commons](https://gisdata.mn.gov/dataset/bdry-deer-permit-areas) website, only the latest DPA boundaries can be downloaded (as far as I can tell). I therefore used the DPA map of 2021 and adapted it to approximate the 2017 boundaries. [Download the map](share/DPA_boundaries.gpkg) and copy it to your working directory. The map I based this on is, unfortunately, not available anymore, so you'll have to take my word for it. 
+
+## Spatial join
+
+After downloading the DPA map and the table with deer densities, import both in GRASS GIS, and join the table with deer densities to the attribute table of the DPA vector layer, based on the DPA ID's in both tables (@fig-deerdensitiescap5). We'll use the functions [v.in.ogr](https://grass.osgeo.org/grass-stable/manuals/v.in.ogr.html), [db.in.ogr](https://grass.osgeo.org/grass-stable/manuals/db.in.ogr.html) and  [v.db.join](https://grass.osgeo.org/grass-stable/manuals/v.db.join.html).
+
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+# Import the vector layer
+v.in.ogr  input=DPA_boundaries.gpkg output=deer_densities
+
+# Import the csv file
+db.in.ogr input=DPA_deer_densities.csv output=deerdensities
+
+# Join table to vector layer
+v.db.join map=deer_densities column=DPA \
+other_table=deerdensities other_column=DPA \
+subset_columns=density2017
+```
+
+## {{< fa brands python >}}
+
+``` python
+# Import the vector layer
+gs.run_command("v.in.ogr", input="DPA_boundaries.gpkg", output="deer_densities")
+
+# Import the csv file
+gs.run_command(
+    "db.in.ogr", input=r"DPA_deer_densities.csv", output="deerdensities"
+)
+
+# Join table to vector layer
+gs.run_command(
+    "v.db.join",
+    map="deer_densities",
+    column="DPA",
+    other_table="deerdensities",
+    other_column="DPA",
+    subset_columns="density2017",
+)
+```
+:::
+
+Now, convert the vector layer to a raster layer representing the *deer_densities* in 2017. You can use the function [v.to.rast](https://grass.osgeo.org/grass-stable/manuals/v.to.rast.html) to rasterize the vector layer. Use the estimated deer densities for 2017 as raster values. The [where]{.style-parameter} parameter serves to ensure that polygons without values are converted to no-data raster cells instead of getting a value of zero.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+v.to.rast input=deer_densities use=attr attribute_column=density2017 \
+output=deer_tmp where="density2017 != ''"
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command(
+    "v.to.rast",
+    input="deer_densities",
+    use="attr",
+    attribute_column="density2017",
+    output="deer_tmp",
+    where="density2017 != ''",
+)
+```
+:::
+
+For some DPA's there were no estimates, leaving gaps in the map. To fill those gaps, you can use nearest neighbor interpolation (Thiessen polygons). This will assign values to the empty raster cells that are equal to the nearest neighboring raster cell with a value. You can use the [r.grow.distance](https://grass.osgeo.org/grass-stable/manuals/r.grow.distance.html) function to do this by providing the name for the value output raster map using the [value]{.style-parameter}. 
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+r.grow.distance input=deer_tmp value=deer_densities
+```
+  
+## {{< fa brands python >}}
+
+``` python
+gs.run_command("r.grow.distance", input="deer_tmp", value="deer_densities")
+```
+::: 
+
+The resulting layer [deer_densities]{.style-data} gives the deer densities (deer/km$^2$) per DPA. Nice, but deer densities will not be uniformly distributed across the DPA’s. In general, one may expect deer densities to be higher in areas with more resources (food and shelter). So, to account for such differences in resource availability within the DPA’s, you will create a potential suitability distribution map (section [-@sec-habitatsuitability]). Assuming that deer densities are proportional to the suitability index score, use the habitat suitability map to disaggregate the deer density numbers (section [-@sec-disaggregate]).
+
+As a final step, remove all intermediate layers.
+
+::: {.panel-tabset group="language"}
+
+## {{< fa solid terminal >}}
+
+``` bash
+g.remove -f type=raster name=deer_tmp
+```
+
+## {{< fa brands python >}}
+
+``` python
+gs.run_command("g.remove", flags="f", type="raster", name="deer_tmp")
+```
+:::
+
+```{=html}
+<!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
+<script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
+<script>
+  /* paste this line in verbatim */
+  window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
+  /* customize formbutton below*/     
+  formbutton("create", {
+    action: "https://formspree.io/f/xjvppyvg",
+    title: "Feedback", 
+    fields: [
+      { 
+        type: "email", 
+        label: "Email:", 
+        name: "email",
+        required: true,
+        placeholder: "your@email.com"
+      },
+      {
+        type: "hidden",
+        label: "",
+        value: "distribution white tailed deer - page 3",
+      },
+      {
+        type: "textarea",
+        label: "Message:",
+        name: "message",
+        placeholder: "Question or feedback? Let us know here.",
+      },
+      { type: "submit" }      
+    ],
+    styles: {
+      title: {
+        backgroundColor: "#57B444"
+      },
+      button: {
+        backgroundColor: "#57B444"
+      }
+    }
+  });
+</script>
+
+```
+
+

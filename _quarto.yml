@@ -1,0 +1,109 @@
+project:
+  type: book
+  resources:
+    - "images/logo.png"
+    - "*.xlsx"
+    - "*.mkv"
+    - "*.webm"
+    - "*.ogv"
+    - "*.pdf"
+    - "*.docx"
+    - "*.odt"
+    - "*.ods"
+    - "*.gpkg"
+book:
+  title: "Mapping the distribution of the White-tailed deer in Minnesota"
+  subtitle: "Using multi-criteria analysis and spatial disagregation in GRASS GIS"
+  date: "31-12-2021"
+  original-date: "31-12-2021"
+  license: "CC BY-NC-SA 4.0"
+  search:
+    location: sidebar
+  author:
+    - name: Paulo van Breugel
+      url: https://ecodiv.earth/about.html
+      affiliations:
+        - name: HAS green academy
+          Department: Applied Geo-information Science
+          country: the Netherlands
+          url: https://has.nl/en
+        
+  cover-image: images/bookcover_2.png
+  #downloads: [pdf, epub]
+  
+  site-url: https://ecodiv.earth/
+  favicon: images/favicon.ico
+  page-footer: "&copy; <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/'>CC BY-NC-SA 4.0</a> by Paulo van Breugel,  2021 - 2025."
+  language: en
+  
+  chapters:
+    - index.qmd
+    - 1_requirements.qmd
+    - 2_deerdensities.qmd
+    - 3_habitatsuitability.qmd
+    - 4_spatialdisaggregation.qmd
+    - 5_results.qmd
+    - references.qmd
+  appendices:
+    - all_code.qmd
+    - functions.qmd
+
+  page-navigation: true
+  reader-mode: true
+
+  sidebar:
+      logo: "images/whitetaileddeer7.png"
+      style: "floating"
+      collapse-level: 2
+      footer: |
+         <p style="color:lightgrey;"><i><a href="https://has.nl/en">HAS green academy</a><br>
+         <a href="https://www.has.nl/onderzoek/lectoraten/lectoraat-innovatieve-biomonitoring/">Innovative Biomonitoring</a></p>
+
+  sharing: [twitter, facebook, linkedin]
+  open-graph: true
+  twitter-card:
+    site: "@ecodiv"
+
+filters:
+  - nutshell
+
+cite-method: citeproc
+bibliography: references.bib
+csl: nature.csl
+link-citations: true
+
+crossref:
+  appendix-title: "Appendix"
+  appendix-delim: ". "
+
+format:
+  html:
+    lightbox: true
+    code-overflow: scroll
+    code-line-numbers: true
+    code-annotations: select
+    copyright: "Ecodiv.earth,  2025"
+    license: CC BY-NC-SA
+    pagetitle: "Ecodiv.earth | From suitability to suitable regions"
+    author-meta: "Paulo van Breugel"
+    link-external-icon: false
+    link-external-newwindow: true
+    theme: 
+      light: [cosmo, defaults.scss]
+      dark: [slate, defaults.sccs]
+    fontsize: 1em
+    mainfont: Helvetica
+    crossref:
+      sec-prefix: Chapter
+      fig-title: Figure
+      tbl-title: Table
+      fig-prefix: Figure
+      tbl-prefix: Table
+      exr-title: Exercise
+      exr-prefix: Exercise
+      appendix-title: Appendix
+      appendix-delim: ". "
+    smooth-scroll: true
+    nocite: |
+      @michiel2022 |
+
