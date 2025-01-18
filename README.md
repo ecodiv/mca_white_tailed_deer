@@ -10,4 +10,8 @@ This tutorial emphasizes learning by doing, guiding you through the core functio
 
 The repository contains the source material (Quarto book), but note that the Quarto extensions are not included. They need to be installed separately. 
 
-For the latest online HTML version, go to [https://ecodiv.earth/TutorialsNotes/deerdensities/](https://ecodiv.earth/TutorialsNotes/deerdensities/).
+For the latest online HTML version, go to [https://ecodiv.earth/TutorialsNotes/deerdensities/](https://ecodiv.earth/TutorialsNotes/deerdensities/). 
+
+To cite this reader, use [![DOI](https://zenodo.org/badge/914783965.svg)](https://doi.org/10.5281/zenodo.14627019)
+
+
