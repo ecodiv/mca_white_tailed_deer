@@ -1,0 +1,9 @@
+cff-version: 1.1.0
+message: "If you use this material, please cite it as below."
+authors:
+- family-names: van Breugel 
+  given-names: Paulo
+orcid: https://orcid.org/0000-0001-9579-0831
+title:Mapping the distribution of the White-tailed deer in Minnesota using multi-criteria analysis and spatial disagregation in GRASS GIS
+version: v1.5
+date-released: 2025-01-10
