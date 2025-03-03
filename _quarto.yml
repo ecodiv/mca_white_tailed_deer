@@ -14,7 +14,7 @@ project:
 book:
   title: "Mapping the distribution of the White-tailed deer in Minnesota"
   subtitle: "Using multi-criteria analysis and spatial disagregation in GRASS GIS"
-  date: "31-12-2021"
+  date: today
   original-date: "31-12-2021"
   license: "CC BY-NC-SA 4.0"
   search:
@@ -57,7 +57,8 @@ book:
       collapse-level: 2
       footer: |
          <p style="color:lightgrey;"><i><a href="https://has.nl/en">HAS green academy</a><br>
-         <a href="https://www.has.nl/onderzoek/lectoraten/lectoraat-innovatieve-biomonitoring/">Innovative Biomonitoring</a></p>
+         <a href="https://www.has.nl/onderzoek/lectoraten/lectoraat-innovatieve-biomonitoring/">Innovative Biomonitoring</a><br>
+         DOI <a href="https://doi.org/10.5281/zenodo.14627020">10.5281/zenodo.14627020</a></p>
 
   sharing: [twitter, facebook, linkedin]
   open-graph: true

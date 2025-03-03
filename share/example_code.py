@@ -1,0 +1,276 @@
+# Import libraries
+import grass.script as gs
+import os
+
+## Chapter 2 - Getting started
+# ---------------------------------------------------------------------------------------
+
+# Set working directory
+os.chdir("/home/paulo/OneDrive/Data/Ecodiv/Layers/white_tailed_deer/")
+
+# Fill in
+dbase = "/home/paulo/OneDrive/Data/Ecodiv/Grassdb/"
+location = "Minnesota"
+mapset = "WhitetailedDeer2"
+
+# Create location and mapset
+gs.run_command("g.mapset", flags="c", location=location, mapset=mapset, dbase=dbase)
+
+# Import vector layer with Minnesota boundary
+gs.run_command(
+    "v.in.ogr",
+    input="bdry_state_of_minnesota.gpkg",
+    layer="state_of_minnesota",
+    output="Minnesota_bdry",
+)
+
+# Set the region to match the extent of Minnesota
+gs.run_command("g.region", vector="Minnesota_bdry")
+
+# Import land use map. Use the -r flag to limit the import to the region's extent
+gs.run_command(
+    "r.in.gdal",
+    flags="r",
+    input="NLCD_2016_Land_Cover.tif",
+    output="NLCD_2016",
+    memory=40000,
+)
+
+# set the region to match extent and resolution of NLCD_2016
+gs.run_command(
+    "g.region",
+    flags="a",
+    raster="NLCD_2016",
+)
+
+# Import building feature layer and convert to raster
+gs.run_command(
+    "v.import",
+    input="gis_osm_buildings_a_free_1.shp",
+    output="buildings",
+)
+gs.run_command(
+    "v.to.rast",
+    input="buildings",
+    output="buildings",
+    use="val",
+    value=0,
+    memory=40000,
+)
+gs.run_command("g.remove", flags="f", type="vector", name="buildings")
+
+# Import railway feature layer and convert to raster
+gs.run_command(
+    "v.import",
+    input="gis_osm_railways_free_1.shp",
+    output="railways",
+)
+gs.run_command(
+    "v.to.rast",
+    flags="d",
+    input="railways",
+    output="railways",
+    use="val",
+    value=0,
+    memory=40000,
+)
+gs.run_command("g.remove", flags="f", type="vector", name="railways")
+
+# Import roads feature layer and convert to raster
+gs.run_command(
+    "v.import",
+    input="gis_osm_roads_free_1.shp",
+    output="roads",
+)
+gs.run_command(
+    "v.to.rast",
+    flags="d",
+    input="roads",
+    output="roads",
+    use="val",
+    value=0,
+    memory=40000,
+)
+gs.run_command("g.remove", flags="f", type="vector", name="roads")
+
+# Import traffic feature layer and convert to raster
+gs.run_command("v.import", input="gis_osm_traffic_a_free_1.shp", output="traffic")
+gs.run_command(
+    "v.to.rast",
+    input="traffic",
+    output="traffic",
+    use="val",
+    value=0,
+    memory=1000,
+)
+gs.run_command("g.remove", flags="f", type="vector", name="traffic")
+
+## Chapter 3 - Deer densities
+# ---------------------------------------------------------------------------------------
+
+# Import the DPA vector layer
+gs.run_command("v.in.ogr", input="DPA_boundaries.gpkg", output="deer_densities")
+
+# Import the csv file with deer density numbers
+gs.run_command(
+    "db.in.ogr",
+    input=r"DPA_deer_densities.csv",
+    output="deerdensities",
+)
+
+# Join table to vector layer
+gs.run_command(
+    "v.db.join",
+    map="deer_densities",
+    column="DPA",
+    other_table="deerdensities",
+    other_column="DPA",
+    subset_columns="density2017",
+)
+
+# Convert the deer density vector layer to raster layer
+gs.run_command(
+    "v.to.rast",
+    input="deer_densities",
+    use="attr",
+    attribute_column="density2017",
+    output="deer_tmp",
+    where="density2017 != ''",
+)
+
+# Use nearest neighbor interpolation to fill in gaps
+gs.run_command(
+    "r.grow.distance", input="deer_tmp", value="deer_densities", overwrite=True
+)
+
+# Clean up
+gs.run_command("g.remove", flags="f", type="raster", name="deer_tmp")
+
+## Chapter 4 - Habitat suitability
+# ---------------------------------------------------------------------------------------
+
+# Install r.recode.attr extension
+gs.run_command("g.extension", extension="r.recode.attr")
+
+# Recode NLCD layer to create DHSI_shelter and _food layers
+gs.run_command("r.recode.attr", input="NLCD_2016", output="DHSI", rules="deerSHI.csv")
+
+# remove mask (just in case there is one)
+try:
+    gs.run_command("r.mask", flags="r")
+except:
+    pass
+
+# Moving window average of both DHSI layers
+gs.run_command(
+    "r.mfilter",
+    input="DHSI_shelter",
+    output="DHSI_shelterS",
+    filter="QHSwaf_30m.txt",
+    nprocs=10,
+)
+gs.run_command(
+    "r.mfilter",
+    input="DHSI_food",
+    output="DHSI_foodS",
+    filter="QHFwaf_30m.txt",
+    nprocs=10,
+)
+
+# Combine the DHSI layers
+gs.run_command(
+    "r.series",
+    input=["DHSI_shelterS", "DHSI_foodS"],
+    output="HSI_tmp",
+    method="minimum",
+    nprocs=10,
+)
+
+# Patch HSI_temp and build up layers
+gs.run_command(
+    "r.patch",
+    input=[
+        "buildings",
+        "railways",
+        "roads",
+        "traffic",
+        "HSI_tmp",
+    ],
+    output="HSI_tmp2",
+    memory=40000,
+    nprocs=10,
+)
+
+# Assign value 0 to areas with water
+gs.run_command("r.mask", vector="Minnesota_bdry")
+gs.run_command("r.mapcalc", expression="HSI_deer = if(NLCD_2016==11,0,HSI_tmp2)")
+
+# Remove intermediate layers
+gs.run_command(
+    "g.remove",
+    flags="f",
+    type="raster",
+    name=[
+        "buildings",
+        "railways",
+        "roads",
+        "traffic",
+        "HSI_tmp",
+        "HSI_tmp2",
+        "DHSI_shelter",
+        "DHSI_food",
+        "DHSI_foodS",
+        "DHSI_shelterS",
+        "deer_tmp",
+    ],
+)
+
+## Chapter 5 - Spatial disaggregation
+# ---------------------------------------------------------------------------------------
+
+# Create base map with with DPA as zones
+gs.run_command(
+    "v.to.rast",
+    input="deer_densities",
+    use="attr",
+    attribute_column="DPA",
+    output="dpa",
+)
+
+# Compute sum/average HSI score per DPA
+gs.run_command(
+    "r.stats.zonal",
+    base="dpa",
+    cover="HSI_deer",
+    method="average",
+    output="HSI_average",
+)
+
+# Calculate the relative density
+gs.run_command(
+    "r.mapcalc",
+    expression=("DeerDensities = (HSI_deer/HSI_average)*deer_densities"),
+    overwrite=True,
+)
+
+# Reclass the 2% highest values to equal the 98 percentile.
+p = (
+    gs.read_command("r.quantile", input="DeerDensities", percentiles=98)
+    .split(":")[2]
+    .strip()
+)
+expr = "DeerDensities = if(DeerDensities > {0}, {0}, DeerDensities)".format(p)
+gs.run_command("r.mapcalc", expression=expr, overwrite=True)
+
+# Remove intermediate layers
+gs.run_command(
+    "g.remove",
+    flags="f",
+    type=["raster", "vector"],
+    name=[
+        "deer_densities",
+        "deer_tmp",
+        "dpa",
+        "HSI_average",
+    ],
+)

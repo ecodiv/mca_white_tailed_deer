@@ -1,14 +1,9 @@
 _book
 _archive
-_extensions
-_book
 .Rproj.user
 .quarto
 .Rhistory
 .RData
-habitat_suitability.zip
-minnesota-latest-free.shp.zip
-habitat_suitability.tif
-osm_roads_main.gpkg
-DPA_boundaries.gpkg
-example_code.py
+
+
+/.quarto/
